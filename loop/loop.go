@@ -36,3 +36,11 @@ func infiniteLoopSum[T constraints.Unsigned](n T) T {
 	}
 	return sum
 }
+
+func forEachArraySum[T constraints.Unsigned](arr []T) T {
+	var sum T
+	for _, element := range arr {
+		sum += element
+	}
+	return sum
+}
