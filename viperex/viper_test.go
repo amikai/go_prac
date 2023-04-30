@@ -2,6 +2,7 @@ package viperex
 
 import (
 	"bytes"
+	"os"
 	"strings"
 	"testing"
 
@@ -12,7 +13,7 @@ import (
 func TestLoadEnvFile(t *testing.T) {
 	// See https://github.com/spf13/viper#why-viper
 	// Precedence of explicit call to Set higher than config
-	yamlConfig := []byte(`
+	config := []byte(`
 var:
   key: "VALUE_IN_CONF"
 `)
@@ -23,7 +24,8 @@ var:
 	viper.SetEnvKeyReplacer(strings.NewReplacer(`.`, `_`))
 	viper.SetEnvPrefix("MYAPP")
 	viper.AutomaticEnv()
-	viper.ReadConfig(bytes.NewBuffer(config))
+	err := viper.ReadConfig(bytes.NewBuffer(config))
+	assert.NoError(t, err)
 
 	expect := "VALUE"
 	got := viper.GetString("var.key")
