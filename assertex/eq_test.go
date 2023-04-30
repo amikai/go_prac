@@ -1,4 +1,4 @@
-package structex
+package assertex
 
 import (
 	"testing"
