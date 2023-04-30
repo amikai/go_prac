@@ -54,3 +54,19 @@ func TestCompareAnonymousStruct2(t *testing.T) {
 
 	assert.NotEqualValues(t, p, a)
 }
+
+func TestMapEq(t *testing.T) {
+	m1 := map[string]int{
+		"a": 1, "b": 2, "c": 3,
+	}
+	m2 := map[string]int{
+		"c": 3, "b": 2, "a": 1,
+	}
+	assert.Equal(t, m1, m2)
+}
+
+func TestSliceEq(t *testing.T) {
+	s1 := []int{1, 2, 3}
+	s2 := []int{1, 2, 3}
+	assert.Equal(t, s1, s2)
+}
