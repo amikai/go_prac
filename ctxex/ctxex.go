@@ -5,11 +5,9 @@ import (
 	"time"
 )
 
-var workDuration time.Duration = 5 * time.Second
-
-func DoWork(ctx context.Context) error {
+func DoWork(ctx context.Context, duration time.Duration) error {
 	select {
-	case <-time.After(workDuration):
+	case <-time.After(duration):
 		return nil
 	case <-ctx.Done():
 		return ctx.Err()
