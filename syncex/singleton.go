@@ -1,4 +1,4 @@
-package singleton
+package syncex
 
 import "sync"
 
