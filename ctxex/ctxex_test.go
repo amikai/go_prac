@@ -2,6 +2,7 @@ package ctxex
 
 import (
 	"context"
+	"errors"
 	"testing"
 	"time"
 
@@ -39,4 +40,13 @@ func TestDoWorkCancel(t *testing.T) {
 	}()
 	err := DoWork(ctx, workDuration)
 	assert.ErrorIs(t, err, context.Canceled)
+}
+
+func TestCancelCause(t *testing.T) {
+	causeErr := errors.New("cause")
+	ctx, cancel := context.WithCancelCause(context.Background())
+	cancel(causeErr)
+
+	assert.ErrorIs(t, ctx.Err(), context.Canceled)
+	assert.ErrorIs(t, context.Cause(ctx), causeErr)
 }
