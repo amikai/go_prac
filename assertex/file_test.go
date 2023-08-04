@@ -14,9 +14,9 @@ func TestDirExists(t *testing.T) {
 }
 
 func TestFileExists(t *testing.T) {
-	f, err := os.CreateTemp("", "dummy")
+	//  The directory t.TempDir() is automatically removed by Cleanup when the test and all its subtests complete.
+	f, err := os.CreateTemp(t.TempDir(), "dummy")
 	assert.NoError(t, err)
-	defer os.Remove(f.Name())
 	defer f.Close()
 	assert.FileExists(t, f.Name())
 }
