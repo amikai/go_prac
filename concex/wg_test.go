@@ -24,3 +24,13 @@ func TestConcWg(t *testing.T) {
 	wg.Wait()
 	assert.Equal(t, expSearchResult, results)
 }
+
+func TestConcWgWaitAndRecover(t *testing.T) {
+	wg := conc.NewWaitGroup()
+	panicMessage := "conc wait group panic"
+	wg.Go(func() {
+		panic(panicMessage)
+	})
+	recoveredPanic := wg.WaitAndRecover()
+	assert.Equal(t, recoveredPanic.Value.(string), panicMessage)
+}
