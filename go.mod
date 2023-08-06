@@ -7,7 +7,7 @@ require (
 	github.com/sourcegraph/conc v0.3.0
 	github.com/spf13/viper v1.13.0
 	github.com/stretchr/testify v1.8.1
-	golang.org/x/exp v0.0.0-20221010202428-3a778c567f61
+	golang.org/x/exp v0.0.0-20230801115018-d63ba01acd4b
 	golang.org/x/sync v0.2.0
 )
 

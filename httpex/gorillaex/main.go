@@ -6,12 +6,15 @@ import (
 	"errors"
 	"log"
 	"net/http"
+	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/gorilla/mux"
+	"golang.org/x/exp/slog"
 	"golang.org/x/sync/errgroup"
 
+	"github.com/amikai/go_prac/httpex"
 	"github.com/amikai/go_prac/httpex/db"
 )
 
@@ -67,11 +70,23 @@ func BooksHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func NotFoundHandler(logger *slog.Logger) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		logger.Debug(r.URL.Path, slog.Int("code", 404), slog.String("method", r.Method), slog.String("path", r.URL.Path), slog.String("query", r.URL.RawQuery),
+			slog.String("ip", r.RemoteAddr), slog.String("user-agent", r.UserAgent()))
+	})
+}
+
 func main() {
+	h := slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelDebug})
+	logger := slog.New(h)
+
 	r := mux.NewRouter()
 	r.HandleFunc("/products/{id}", ProductHandler).Methods("GET")
 	r.HandleFunc("/books/{category}/", BooksCategoryHandler).Methods("GET")
 	r.HandleFunc("/books/{id:BOOK-[0-9]+}", BooksHandler).Methods("GET")
+	r.Use(mux.MiddlewareFunc(httpex.RequestLogMiddleware(logger)))
+	r.NotFoundHandler = NotFoundHandler(logger)
 
 	srv := &http.Server{
 		Addr:    ":8080",
