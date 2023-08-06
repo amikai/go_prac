@@ -74,6 +74,7 @@ func NotFoundHandler(logger *slog.Logger) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		logger.Debug(r.URL.Path, slog.Int("code", 404), slog.String("method", r.Method), slog.String("path", r.URL.Path), slog.String("query", r.URL.RawQuery),
 			slog.String("ip", r.RemoteAddr), slog.String("user-agent", r.UserAgent()))
+		http.NotFound(w, r)
 	})
 }
 
