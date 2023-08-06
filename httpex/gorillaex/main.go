@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -110,8 +109,8 @@ func main() {
 
 	err := g.Wait()
 	if errors.Is(err, context.Canceled) || err == nil {
-		log.Println("gracefully quit gorilla server")
+		logger.Info("gracefully quit gorilla server")
 	} else if err != nil {
-		log.Println(err)
+		logger.Error(err.Error())
 	}
 }
