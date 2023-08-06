@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"net/http"
 	"os"
@@ -14,59 +13,11 @@ import (
 	"golang.org/x/sync/errgroup"
 
 	"github.com/amikai/go_prac/httpex"
-	"github.com/amikai/go_prac/httpex/db"
 )
 
 type Resp[T any] struct {
 	Data  T      `json:"data,omitempty"`
 	Error string `json:"error,omitempty"`
-}
-
-func ProductHandler(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-
-	vars := mux.Vars(r)
-	ID := vars["id"]
-	resp := Resp[*db.Product]{
-		Data: db.GetProductByID(ID),
-	}
-
-	enc := json.NewEncoder(w)
-	err := enc.Encode(resp)
-	if err != nil {
-		http.Error(w, "", http.StatusInternalServerError)
-	}
-}
-
-func BooksCategoryHandler(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-
-	vars := mux.Vars(r)
-	category := vars["category"]
-	resp := Resp[[]*db.Book]{
-		Data: db.GetBooksByCategory(category),
-	}
-	enc := json.NewEncoder(w)
-	err := enc.Encode(resp)
-	if err != nil {
-		http.Error(w, "", http.StatusInternalServerError)
-	}
-}
-
-func BooksHandler(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-
-	vars := mux.Vars(r)
-	ID := vars["id"]
-	resp := Resp[*db.Book]{
-		Data: db.GetBooksByID(ID),
-	}
-
-	enc := json.NewEncoder(w)
-	err := enc.Encode(resp)
-	if err != nil {
-		http.Error(w, "", http.StatusInternalServerError)
-	}
 }
 
 func NotFoundHandler(logger *slog.Logger) http.Handler {

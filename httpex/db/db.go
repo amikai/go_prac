@@ -1,55 +1,55 @@
 package db
 
 type Product struct {
-	ID   *string `json:"id,omitempty"`
-	Name *string `json:"name,omitempty"`
+	ID   string `json:"id,omitempty"`
+	Name string `json:"name,omitempty"`
 }
 
 type Book struct {
-	ID       *string `json:"id,omitempty"`
-	Name     *string `json:"name,omitempty"`
-	Category *string `json:"category,omitempty"`
+	ID       string `json:"id,omitempty"`
+	Name     string `json:"name,omitempty"`
+	Category string `json:"category,omitempty"`
 }
 
-func ref[T any](val T) *T {
-	return &val
-}
+var GetProductByID = getProductByID
+var GetBooksByCategory = getBooksByCategory
+var GetBooksByID = getBooksByID
 
 var products = map[string]*Product{
 	"ID-001": {
-		ID:   ref("ID-001"),
-		Name: ref("The Legend of Zelda"),
+		ID:   "ID-001",
+		Name: "The Legend of Zelda",
 	},
 	"ID-002": {
-		ID:   ref("ID-002"),
-		Name: ref("Mario Kart"),
+		ID:   "ID-002",
+		Name: "Mario Kart",
 	},
 	"ID-003": {
-		ID:   ref("ID-003"),
-		Name: ref("Animal Crossing"),
+		ID:   "ID-003",
+		Name: "Animal Crossing",
 	},
 }
 
 var books = map[string]*Book{
 	"BOOK-001": {
-		ID:       ref("BOOK-001"),
-		Name:     ref("Thinking, Fast and Slow"),
-		Category: ref("Non-Fiction"),
+		ID:       "BOOK-001",
+		Name:     "Thinking, Fast and Slow",
+		Category: "Non-Fiction",
 	},
 	"BOOK-002": {
-		ID:       ref("BOOK-002"),
-		Name:     ref("The Power of Habit"),
-		Category: ref("Non-Fiction"),
+		ID:       "BOOK-002",
+		Name:     "The Power of Habit",
+		Category: "Non-Fiction",
 	},
 	"BOOK-003": {
-		ID:       ref("BOOK-003"),
-		Name:     ref("The Lord of the Rings"),
-		Category: ref("Fantasy"),
+		ID:       "BOOK-003",
+		Name:     "The Lord of the Rings",
+		Category: "Fantasy",
 	},
 	"BOOK-004": {
-		ID:       ref("BOOK-004"),
-		Name:     ref("A Song of Ice and Fire"),
-		Category: ref("Fantasy"),
+		ID:       "BOOK-004",
+		Name:     "A Song of Ice and Fire",
+		Category: "Fantasy",
 	},
 }
 
@@ -64,7 +64,7 @@ var booksByCategory = map[string][]*Book{
 	},
 }
 
-func GetProductByID(ID string) *Product {
+func getProductByID(ID string) *Product {
 	p, ok := products[ID]
 	if !ok {
 		return nil
@@ -72,10 +72,10 @@ func GetProductByID(ID string) *Product {
 	return p
 }
 
-func GetBooksByCategory(category string) []*Book {
+func getBooksByCategory(category string) []*Book {
 	return booksByCategory[category]
 }
 
-func GetBooksByID(ID string) *Book {
+func getBooksByID(ID string) *Book {
 	return books[ID]
 }
