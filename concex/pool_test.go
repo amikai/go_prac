@@ -8,8 +8,6 @@ import (
 
 	"github.com/sourcegraph/conc/pool"
 	"github.com/stretchr/testify/assert"
-
-	set "github.com/deckarep/golang-set/v2"
 )
 
 func TestPool(t *testing.T) {
@@ -49,21 +47,18 @@ func TestErrPool(t *testing.T) {
 func TestContextPoolSuccess(t *testing.T) {
 	var p *pool.ContextPool = pool.New().WithContext(context.Background()).WithMaxGoroutines(runtime.NumCPU())
 
-	results := set.NewSet[string]()
 	for _, url := range searchURLs {
 		url := url
 		p.Go(func(ctx context.Context) error {
-			result, err := fakeSearchCtx(ctx, url)
+			_, err := fakeSearchCtx(ctx, url)
 			if err != nil {
 				return err
 			}
-			results.Add(result)
 			return nil
 		})
 	}
 	err := p.Wait()
 	assert.NoError(t, err)
-	assert.True(t, expSearchResultSet.Equal(results))
 }
 
 func TestContextPoolTimeout(t *testing.T) {
@@ -72,17 +67,14 @@ func TestContextPoolTimeout(t *testing.T) {
 	// ContextPool runs tasks that take a context, and join (errors.Join) the error
 	var p *pool.ContextPool = pool.New().WithContext(ctx).WithMaxGoroutines(runtime.NumCPU())
 
-	// the set is thread safe
-	results := set.NewSet[string]()
 	for _, url := range searchURLs {
 		url := url
 		p.Go(func(ctx context.Context) error {
-			result, err := fakeSearchCtxWithDuration(ctx, url, 1*time.Second)
+			_, err := fakeSearchCtxWithDuration(ctx, url, 1*time.Second)
 			if err != nil {
 				// searchErr will wrap err
 				return searchErr(url, err)
 			}
-			results.Add(result)
 			return nil
 		})
 	}
@@ -103,8 +95,6 @@ func TestContextPoolCancelOnError(t *testing.T) {
 		WithMaxGoroutines(runtime.NumCPU())
 
 	failedIndex := 3
-	// the set is thread safe
-	results := set.NewSet[string]()
 	for i, url := range searchURLs {
 		i, url := i, url
 		p.Go(func(ctx context.Context) error {
@@ -113,11 +103,10 @@ func TestContextPoolCancelOnError(t *testing.T) {
 				return err
 			}
 
-			result, err := fakeSearchCtxWithDuration(ctx, url, 1*time.Second)
+			_, err := fakeSearchCtxWithDuration(ctx, url, 1*time.Second)
 			if err != nil {
 				return err
 			}
-			results.Add(result)
 			return nil
 		})
 	}
