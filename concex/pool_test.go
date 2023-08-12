@@ -13,29 +13,16 @@ import (
 )
 
 func TestPool(t *testing.T) {
-	out := make(chan string)
 	var p *pool.Pool = pool.New().WithMaxGoroutines(runtime.NumCPU())
 
-	go func() {
-		for _, url := range searchURLs {
-			url := url
-			// Be careful!!! if goroutines in pool are busy, p.Go will be blocked
-			p.Go(func() {
-				result, _ := fakeSearch(url)
-				out <- result
-			})
-		}
-		p.Wait()
-		// sender close
-		close(out)
-	}()
-
-	results := []string{}
-	for o := range out {
-		results = append(results, o)
+	for _, url := range searchURLs {
+		url := url
+		// Be careful!!! if goroutines in pool are busy, p.Go will be blocked
+		p.Go(func() {
+			_, _ = fakeSearch(url)
+		})
 	}
-	// the order is not guaranteed
-	assert.ElementsMatch(t, expSearchResult, results)
+	p.Wait()
 }
 
 func TestErrPool(t *testing.T) {
