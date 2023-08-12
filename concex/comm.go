@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"math/rand"
 	"time"
 
 	set "github.com/deckarep/golang-set/v2"
@@ -12,6 +13,8 @@ import (
 const fakeResultPrefix = "Fake Result: "
 
 func fakeSearch(url string) (string, error) {
+	n := rand.Intn(100)
+	time.Sleep(time.Duration(n) * time.Millisecond)
 	return fakeResultPrefix + url, nil
 }
 
@@ -67,6 +70,8 @@ var searchErrs = map[string]error{
 	"https://www.walmart.com":         errors.New("network failed when searching https://www.walmart.com"),
 }
 
+// searchErr return the correspond error for each url
+// if len(errs) > 0, then wrap errs to new error
 func searchErr(url string, errs ...error) error {
 	retErr := searchErrs[url]
 	if len(errs) == 0 {
