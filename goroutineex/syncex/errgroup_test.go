@@ -2,6 +2,8 @@ package syncex
 
 import (
 	"context"
+	"runtime"
+	"sync/atomic"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -46,4 +48,22 @@ func TestErrGroup(t *testing.T) {
 		fakeResultPrefix + "https://www.amazon.com",
 	}
 	assert.Equal(t, exp, results)
+}
+
+func TestErrGroupSetLimit(t *testing.T) {
+	g, _ := errgroup.WithContext(context.Background())
+	g.SetLimit(runtime.NumCPU())
+	t.Logf("errgroup SetLimit(%d)", runtime.NumCPU())
+
+	var total uint64
+
+	for i := 0; i < 1000000; i++ {
+		g.Go(func() error {
+			atomic.AddUint64(&total, 1)
+			return nil
+		})
+	}
+	err := g.Wait()
+	assert.NoError(t, err)
+	assert.Equal(t, uint64(1000000), total)
 }
