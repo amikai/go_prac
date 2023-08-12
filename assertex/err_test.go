@@ -2,6 +2,7 @@ package assertex
 
 import (
 	"errors"
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -17,11 +18,22 @@ func TestErr(t *testing.T) {
 	assert.Error(t, err)
 }
 
-func TestErrAs(t *testing.T) {
-	// TODO:
+func TestErrIs(t *testing.T) {
+	var cause = errors.New("cause")
+	var wrap = fmt.Errorf("wrap: %w", cause)
+	assert.ErrorIs(t, wrap, cause)
 }
 
-func TestErrIs(t *testing.T) {
-	// TODO:
+type exampleErr struct {
+	msg string
+}
 
+func (e exampleErr) Error() string {
+	return e.msg
+}
+
+func TestErrAs(t *testing.T) {
+	err := exampleErr{"just an example"}
+	var exErr exampleErr
+	assert.ErrorAs(t, err, &exErr)
 }
