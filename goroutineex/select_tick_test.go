@@ -1,11 +1,13 @@
-package main
+package goroutineex
 
 import (
 	"fmt"
+	"testing"
 	"time"
 )
 
-var workTime = 5 * time.Second
+var workTime = 500 * time.Millisecond
+var tick = 100 * time.Millisecond
 
 type workerFunc func(chan struct{})
 
@@ -14,9 +16,9 @@ func doWork(done chan struct{}) {
 	done <- struct{}{}
 }
 
-func workWithProgres(work workerFunc) {
+func SelectTimeTick(work workerFunc) {
 	done := make(chan struct{}, 1)
-	ticker := time.NewTicker(1 * time.Second)
+	ticker := time.NewTicker(tick)
 	go work(done)
 	for {
 		select {
@@ -29,6 +31,6 @@ func workWithProgres(work workerFunc) {
 	}
 }
 
-func main() {
-	workWithProgres(doWork)
+func TestSelectTimeTick(t *testing.T) {
+	SelectTimeTick(doWork)
 }
