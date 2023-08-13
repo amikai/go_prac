@@ -1,3 +1,8 @@
 package ds
 
-// TODO: write a interface for stack
+type Stack[T any] interface {
+	Push(T)
+	Pop() (T, error)
+	Peek() (T, error)
+	Empty() bool
+}
