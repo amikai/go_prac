@@ -6,7 +6,7 @@ import (
 
 type WorkerQueue struct {
 	workerNum int
-	queue     chan func()
+	jobQ      chan func()
 	wg        *sync.WaitGroup
 	closeOnce sync.Once
 }
@@ -19,34 +19,36 @@ func NewWorkerQueue(workerNum int, queueSize int) *WorkerQueue {
 		panic("queue size should >= 0")
 	}
 
-	queue := make(chan func(), queueSize)
-	wg := sync.WaitGroup{}
-	for i := 0; i < workerNum; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			for f := range queue {
-				f()
-			}
-		}()
+	wq := &WorkerQueue{
+		workerNum: workerNum,
+		jobQ:      make(chan func(), queueSize),
+		wg:        &sync.WaitGroup{},
 	}
 
-	return &WorkerQueue{
-		workerNum: workerNum,
-		queue:     queue,
-		wg:        &wg,
+	worker := func() {
+		defer wq.wg.Done()
+		for job := range wq.jobQ {
+			job()
+		}
 	}
+
+	for i := 0; i < wq.workerNum; i++ {
+		wq.wg.Add(1)
+		go worker()
+	}
+	return wq
+
 }
 
 func (wq *WorkerQueue) Submit(f func()) {
 	if f != nil {
-		wq.queue <- f
+		wq.jobQ <- f
 	}
 }
 
 func (wq *WorkerQueue) Wait() {
 	wq.closeOnce.Do(func() {
-		close(wq.queue)
+		close(wq.jobQ)
 	})
 	wq.wg.Wait()
 }
