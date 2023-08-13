@@ -1,10 +1,11 @@
 package builtin
 
 import (
+	"maps"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"golang.org/x/exp/maps"
+	mapsexp "golang.org/x/exp/maps"
 )
 
 func TestMapClear(t *testing.T) {
@@ -13,7 +14,7 @@ func TestMapClear(t *testing.T) {
 		"b": 2,
 		"c": 3,
 	}
-	maps.Clear(m)
+	mapsexp.Clear(m)
 	assert.Empty(t, m)
 }
 
@@ -44,7 +45,7 @@ func TestMapKeys(t *testing.T) {
 		"b": 2,
 		"c": 3,
 	}
-	keys := maps.Keys(m)
+	keys := mapsexp.Keys(m)
 	assert.ElementsMatch(t, keys, []string{"c", "b", "a"})
 }
 
@@ -54,7 +55,7 @@ func TestMapValues(t *testing.T) {
 		"b": 2,
 		"c": 2,
 	}
-	keys := maps.Values(m)
+	keys := mapsexp.Values(m)
 	assert.ElementsMatch(t, keys, []int{2, 1, 2})
 }
 

@@ -1,10 +1,9 @@
 package httpex
 
 import (
+	"log/slog"
 	"net/http"
 	"time"
-
-	"golang.org/x/exp/slog"
 )
 
 type MiddlewareFunc func(http.Handler) http.Handler

@@ -3,13 +3,13 @@ package main
 import (
 	"context"
 	"errors"
+	"log/slog"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/gorilla/mux"
-	"golang.org/x/exp/slog"
 	"golang.org/x/sync/errgroup"
 
 	"github.com/amikai/go_prac/httpex"

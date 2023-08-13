@@ -1,9 +1,10 @@
 module github.com/amikai/go_prac
 
-go 1.20
+go 1.21
 
 require (
 	github.com/deckarep/golang-set/v2 v2.3.1
+	github.com/gorilla/mux v1.8.0
 	github.com/sourcegraph/conc v0.3.0
 	github.com/spf13/viper v1.13.0
 	github.com/stretchr/testify v1.8.1
@@ -14,7 +15,6 @@ require (
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
-	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect

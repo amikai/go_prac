@@ -1,10 +1,10 @@
 package builtin
 
 import (
+	"slices"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"golang.org/x/exp/slices"
 )
 
 // also see
@@ -58,4 +58,45 @@ func TestSliceCompact(t *testing.T) {
 	exp := []int{1, 2, 3, 4}
 
 	assert.Equal(t, exp, got)
+}
+
+func TestSliceMin(t *testing.T) {
+	input := []int{3, 2, 1}
+
+	got := slices.Min(input)
+	exp := 1
+	assert.Equal(t, exp, got)
+}
+
+func TestSliceMinEmpty(t *testing.T) {
+	var input []int
+	assert.Panics(t, func() { slices.Min(input) })
+}
+
+func TestSliceMax(t *testing.T) {
+	input := []int{3, 2, 1}
+
+	got := slices.Max(input)
+	exp := 3
+	assert.Equal(t, exp, got)
+}
+
+func TestSliceMaxEmpty(t *testing.T) {
+	var input []int
+	assert.Panics(t, func() { slices.Max(input) })
+}
+
+func TestSliceClone(t *testing.T) {
+	s := []int{1, 2, 3}
+	sc := slices.Clone(s)
+	assert.Equal(t, s, sc)
+	// check the slice is not same
+	assert.NotSame(t, &s, &sc)
+}
+
+func TestSliceContain(t *testing.T) {
+	s := []int{1, 2, 3}
+	assert.True(t, slices.Contains(s, 1))
+	assert.True(t, slices.Contains(s, 2))
+	assert.False(t, slices.Contains(s, 5))
 }
