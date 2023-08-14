@@ -16,6 +16,8 @@ type Employee struct {
 	Age  int
 }
 
+// The implementation of assert.Equal utilizes reflect.DeepEqual.
+
 func TestCompareStruct(t *testing.T) {
 	p := Person{}
 	e := Employee{}
@@ -69,4 +71,14 @@ func TestSliceEq(t *testing.T) {
 	s1 := []int{1, 2, 3}
 	s2 := []int{1, 2, 3}
 	assert.Equal(t, s1, s2)
+}
+
+// Pointer variable equality is determined based on the equality of the
+// referenced values (as opposed to the memory addresses).
+func TestPointToSameValueEq(t *testing.T) {
+	a := 1
+	b := 1
+	pa := &a
+	pb := &b
+	assert.Equal(t, pa, pb)
 }
