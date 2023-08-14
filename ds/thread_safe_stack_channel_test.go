@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestThreadSafeStack(t *testing.T) {
+func TestThreadSafeChannelStack(t *testing.T) {
 	s := NewThreadSafeStack[int](NewSliceStack[int]())
 
 	_, err := s.Pop()
@@ -60,6 +60,13 @@ func BenchmarkMyThreadSafeStackPush(b *testing.B) {
 func BenchmarkMySliceStackPush(b *testing.B) {
 	// run the Fib function b.N times
 	stack := NewSliceStack[int]()
+	for n := 0; n < b.N; n++ {
+		stack.Push(n)
+	}
+}
+
+func BenchmarkMyMutexStack(b *testing.B) {
+	stack := NewThreadSafeMutexStack[int]()
 	for n := 0; n < b.N; n++ {
 		stack.Push(n)
 	}
