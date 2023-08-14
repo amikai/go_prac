@@ -39,7 +39,6 @@ func (s *ThreadSafeChannelStack[T]) serve() {
 		switch req.op {
 		case pushOp:
 			s.Stack.Push(req.val)
-			req.response <- result{}
 		case peekOp:
 			topEle, err := s.Stack.Peek()
 			req.response <- result{
@@ -75,8 +74,7 @@ func (s *ThreadSafeChannelStack[T]) sendRequest(op stackOperation, val T) (respo
 }
 
 func (s *ThreadSafeChannelStack[T]) Push(val T) {
-	response := s.sendRequest(pushOp, val)
-	<-response
+	_ = s.sendRequest(pushOp, val)
 }
 
 func (s *ThreadSafeChannelStack[T]) Peek() (T, error) {
