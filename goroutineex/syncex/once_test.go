@@ -18,6 +18,7 @@ func TestOnce(t *testing.T) {
 			wg.Done()
 		}()
 	}
+	wg.Wait()
 	assert.Equal(t, 1, a)
 }
 
@@ -35,6 +36,7 @@ func TestOnceFunc(t *testing.T) {
 			wg.Done()
 		}()
 	}
+	wg.Wait()
 	assert.Equal(t, 1, a)
 }
 
@@ -53,5 +55,6 @@ func TestOnceValue(t *testing.T) {
 			wg.Done()
 		}()
 	}
+	wg.Wait()
 	assert.Equal(t, 1, a)
 }
