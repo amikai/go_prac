@@ -18,7 +18,7 @@ jobs:
     - name: Install golang
       uses: actions/setup-go@v4
       with:
-          go-version: ${{ matrix.platform }}
+          go-version: ${{ matrix.gover }}
 
     - name: Test and lint
       run: |
