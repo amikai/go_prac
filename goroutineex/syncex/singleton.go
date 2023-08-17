@@ -2,22 +2,16 @@ package syncex
 
 import "sync"
 
-var once sync.Once
-
-type Something struct{}
-
-var instance *Something
-
-func GetInstance() *Something {
-	once.Do(func() {
-		instance = &Something{}
-	})
-	return instance
+type Something struct {
+	Count int
 }
 
-func UnsafeGetInstance() *Something {
-	if instance == nil {
-		instance = &Something{}
-	}
-	return instance
+var onceF = sync.OnceValue(func() *Something {
+	sth := &Something{}
+	sth.Count++
+	return sth
+})
+
+func GetInstance() *Something {
+	return onceF()
 }
