@@ -1,4 +1,4 @@
-package main
+package goroutineex
 
 import (
 	"fmt"
@@ -9,7 +9,7 @@ func doSomething() {
 	time.Sleep(2 * time.Second)
 }
 
-func main() {
+func ExampleTimeAfter() {
 	ch := make(chan struct{}, 1)
 	go func() {
 		doSomething()
