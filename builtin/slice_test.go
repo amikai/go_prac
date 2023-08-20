@@ -100,3 +100,8 @@ func TestSliceContain(t *testing.T) {
 	assert.True(t, slices.Contains(s, 2))
 	assert.False(t, slices.Contains(s, 5))
 }
+
+func TestSliceDelete(t *testing.T) {
+	s := []int{1, 2, 3}
+	assert.Equal(t, []int{1, 3}, slices.Delete(s, 1, 2))
+}
