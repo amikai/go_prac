@@ -89,7 +89,10 @@ func TestHttpGracefullyShudown(t *testing.T) {
 	})
 
 	err := GracefulRun(func(ctx context.Context) error {
-		var srv http.Server
+		srv := http.Server{
+			Addr: ":0",
+		}
+
 		go func() {
 			if err := srv.ListenAndServe(); err != http.ErrServerClosed {
 				log.Fatal(err)
