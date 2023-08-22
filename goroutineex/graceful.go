@@ -19,24 +19,24 @@ type GracefulConfig struct {
 }
 
 func GracefulRun(runFunc func(context.Context) error, config *GracefulConfig) error {
-	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
-	defer cancel()
+	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 
-	errCh := make(chan error)
+	done := make(chan error)
 	go func() {
-		errCh <- runFunc(ctx)
+		done <- runFunc(ctx)
 	}()
 
 	select {
-	case err := <-errCh:
+	case err := <-done:
 		return err
 	case <-ctx.Done():
+		stop()
 		if config == nil {
-			return <-errCh
+			return <-done
 		}
 
 		select {
-		case err := <-errCh:
+		case err := <-done:
 			// gracefully shutdown
 			return err
 		case <-time.After(config.Timeout):
