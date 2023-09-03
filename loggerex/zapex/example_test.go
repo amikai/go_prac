@@ -13,6 +13,7 @@ import (
 // Learn from https://betterstack.com/community/guides/logging/go/zap/
 
 func ExampleInitZap() {
+	// Example write debug level and omit timestamp
 	logger := zap.NewExample()
 	defer logger.Sync()
 
