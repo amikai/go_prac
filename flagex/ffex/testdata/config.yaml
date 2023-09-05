@@ -1,0 +1,5 @@
+intflag: 12
+boolflag: true
+stringflag: test
+durationflag: 10s
+
