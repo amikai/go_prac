@@ -43,6 +43,24 @@ func TestJsonDecoder(t *testing.T) {
 	assert.Equal(t, want, got)
 }
 
+func TestJsonDecodeDisallowUnknownFields(t *testing.T) {
+	data := `
+{
+	"employees": [{
+			"id": "001",
+			"name": "John"
+		}
+	],
+	"name": "ABCCompany",
+	"foo": "bar"
+}`
+	var got Company
+	dec := json.NewDecoder(strings.NewReader(data))
+	dec.DisallowUnknownFields()
+	err := dec.Decode(&got)
+	assert.Error(t, err)
+}
+
 func TestJsonEncoder(t *testing.T) {
 	company := Company{
 		Employees: []*Employee{
