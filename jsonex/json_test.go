@@ -51,6 +51,19 @@ func TestUnmarshal(t *testing.T) {
 	assert.Equal(t, got, want)
 }
 
+func TestUnmarshalFieldNotMatch(t *testing.T) {
+	// By default, object keys which don't have a corresponding struct field are ignored
+	data := []byte(`
+{
+	"foo": "bar"
+}`)
+	var want Company
+	var got Company
+	err := json.Unmarshal(data, &got)
+	assert.NoError(t, err)
+	assert.Equal(t, got, want)
+}
+
 func TestMarshal(t *testing.T) {
 	company := Company{
 		Employees: []*Employee{
