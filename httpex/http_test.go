@@ -19,7 +19,7 @@ func TestHttpHandler(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(contentTypeKey, contentTypeVal)
 		w.WriteHeader(statusCode)
-		io.WriteString(w, bodyContent)
+		_, _ = io.WriteString(w, bodyContent)
 	}
 
 	req := httptest.NewRequest("GET", "http://example.com/foo", nil)
@@ -27,6 +27,7 @@ func TestHttpHandler(t *testing.T) {
 	handler(w, req)
 
 	resp := w.Result()
+	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 
 	assert.Equal(t, resp.StatusCode, statusCode)
@@ -47,6 +48,9 @@ func TestHttpHandlerEndToEnd(t *testing.T) {
 	client := ts.Client()
 
 	resp, err := client.Post(ts.URL+"/upper", "application/text", bytes.NewReader([]byte("abc123XYZ")))
+	if err == nil {
+		defer resp.Body.Close()
+	}
 	assert.NoError(t, err)
 
 	respBody, err := io.ReadAll(resp.Body)
