@@ -10,19 +10,16 @@ import (
 	"syscall"
 
 	"github.com/gin-gonic/gin"
-	adapter "github.com/gwatts/gin-adapter"
 	"golang.org/x/sync/errgroup"
-
-	"github.com/amikai/go_prac/httpex"
 )
 
 func main() {
 	h := slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelDebug})
 	logger := slog.New(h)
 	gin.SetMode(gin.DebugMode)
-	r := gin.New()
-	// TODO: add the middleware for recovery
-	r.Use(adapter.Wrap(httpex.RequestLogMiddleware(logger)))
+	// Default router has gin builtin logger and recovery middleware
+	// In production code, should use gin.New() with custom logger and recovery middleware manually
+	r := gin.Default()
 	r.GET("/products/:id", ProductHandler)
 	r.GET("/books/:category/", BooksCategoryHandler)
 	r.GET("/books/:category/:id", BooksHandler)
