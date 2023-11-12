@@ -94,3 +94,25 @@ func TestJsonEncoder(t *testing.T) {
 	assert.JSONEq(t, want, sb.String())
 
 }
+
+func TestParseAsJsonNumber(t *testing.T) {
+	data := `{"foo": 123}`
+	m := map[string]interface{}{}
+
+	dec := json.NewDecoder(strings.NewReader(data))
+	dec.UseNumber()
+	err := dec.Decode(&m)
+
+	assert.NoError(t, err)
+	num := m["foo"].(json.Number)
+
+	assert.Equal(t, num.String(), "123")
+
+	nf, err := num.Float64()
+	assert.NoError(t, err)
+	assert.Equal(t, nf, float64(123))
+
+	ni, err := num.Int64()
+	assert.NoError(t, err)
+	assert.Equal(t, ni, int64(123))
+}
