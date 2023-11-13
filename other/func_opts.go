@@ -1,22 +1,10 @@
 package other
 
+type Opt func(*Computer)
+
 type Computer struct {
 	CPUNum int
 	Memory string
-}
-
-type Opt func(*Computer)
-
-func WithCPUNum(num int) Opt {
-	return func(c *Computer) {
-		c.CPUNum = num
-	}
-}
-
-func WithCPUMemory(cap string) Opt {
-	return func(c *Computer) {
-		c.Memory = cap
-	}
 }
 
 func NewComputer(opts ...Opt) *Computer {
@@ -25,4 +13,16 @@ func NewComputer(opts ...Opt) *Computer {
 		opt(c)
 	}
 	return c
+}
+
+func WithCPUNum(num int) Opt {
+	return func(c *Computer) {
+		c.CPUNum = num
+	}
+}
+
+func WithMemory(cap string) Opt {
+	return func(c *Computer) {
+		c.Memory = cap
+	}
 }
