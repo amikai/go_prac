@@ -116,4 +116,48 @@ func TestBooksHandler(t *testing.T) {
 	t.Skip("TODO: implement this test")
 }
 
-// TODO: use httptest.Server to do end to end testing
+func testHTTPGetAPIBodyJSONEquality(t *testing.T, c *http.Client, url, want string) {
+	resp, err := c.Get(url)
+	assert.NoError(t, err)
+	defer resp.Body.Close()
+	b, err := io.ReadAll(resp.Body)
+	assert.NoError(t, err)
+	assert.JSONEq(t, want, string(b))
+}
+
+func TestRouterE2E(t *testing.T) {
+	db.GetProductByID = spyGetProductByID
+	db.GetBooksByCategory = spyBooksByCategory
+	s := httptest.NewServer(newRouter(newLogger()))
+	defer s.Close()
+
+	// TODO: convert it to test table
+
+	url := s.URL + "/products/" + fakeProduct.ID
+	wantBody := `
+{
+  "data": {
+    "id": "ID-FAKE",
+    "name": "FAKE_NAME"
+  }
+}`
+	testHTTPGetAPIBodyJSONEquality(t, s.Client(), url, wantBody)
+
+	url = s.URL + "/products/dummy"
+	wantBody = `{}`
+	testHTTPGetAPIBodyJSONEquality(t, s.Client(), url, wantBody)
+
+	url = s.URL + "/books/Fake%20category/"
+	wantBody = `
+{
+  "data": [
+    {
+      "id": "BOOK-999",
+      "name": "Fake name",
+      "category": "Fake category"
+    }
+  ]
+}`
+	testHTTPGetAPIBodyJSONEquality(t, s.Client(), url, wantBody)
+
+}

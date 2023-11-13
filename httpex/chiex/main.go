@@ -19,21 +19,34 @@ type Resp[T any] struct {
 	Error string `json:"error,omitempty"`
 }
 
-func main() {
-	h := slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelDebug})
-	logger := slog.New(h)
+const (
+	ProductAPI       string = "/products/{id}"
+	BooksCategoryAPI string = "/books/{category}/"
+	BooksAPI         string = "/books/{id}"
+)
 
+func newRouter(logger *slog.Logger) *chi.Mux {
 	r := chi.NewRouter()
 	// chi choose func(http.Handler) http.Handler as middleware type,
 	// this is the common type for http middlware in community
 	r.Use(httpex.RequestLogMiddleware(logger))
-	r.Get("/products/{id}", ProductHandler)
-	r.Get("/books/{category}/", BooksCategoryHandler)
-	r.Get("/books/{id}", BooksHandler)
+	r.Get(ProductAPI, ProductHandler)
+	r.Get(BooksCategoryAPI, BooksCategoryHandler)
+	r.Get(BooksAPI, BooksHandler)
+	return r
+}
 
+func newLogger() *slog.Logger {
+	h := slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelDebug})
+	return slog.New(h)
+
+}
+
+func main() {
+	logger := newLogger()
 	srv := &http.Server{
 		Addr:    ":8080",
-		Handler: r,
+		Handler: newRouter(logger),
 	}
 
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
