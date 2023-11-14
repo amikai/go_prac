@@ -57,3 +57,47 @@ func TestMarshalZeroValue(t *testing.T) {
 		assert.JSONEq(t, want, string(got))
 	})
 }
+
+type ArrayType[T any] struct {
+	Field []T `json:"field"`
+}
+
+func TestMarshlArray(t *testing.T) {
+	t.Run("nil array", func(t *testing.T) {
+		arr := ArrayType[int]{Field: nil}
+		got, err := json.Marshal(&arr)
+		assert.NoError(t, err)
+		want := `{"field": null}`
+		assert.JSONEq(t, want, string(got))
+	})
+
+	t.Run("len=0 array", func(t *testing.T) {
+		arr := ArrayType[int]{Field: []int{}}
+		got, err := json.Marshal(&arr)
+		assert.NoError(t, err)
+		want := `{"field": []}`
+		assert.JSONEq(t, want, string(got))
+	})
+}
+
+type MapType[T any] struct {
+	Field map[string]T `json:"field"`
+}
+
+func TestMarshlMap(t *testing.T) {
+	t.Run("nil map", func(t *testing.T) {
+		arr := MapType[int]{Field: nil}
+		got, err := json.Marshal(&arr)
+		assert.NoError(t, err)
+		want := `{"field": null}`
+		assert.JSONEq(t, want, string(got))
+	})
+
+	t.Run("len=0 map", func(t *testing.T) {
+		arr := MapType[int]{Field: map[string]int{}}
+		got, err := json.Marshal(&arr)
+		assert.NoError(t, err)
+		want := `{"field": {}}`
+		assert.JSONEq(t, want, string(got))
+	})
+}
