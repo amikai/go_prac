@@ -105,3 +105,11 @@ func TestSliceDelete(t *testing.T) {
 	s := []int{1, 2, 3}
 	assert.Equal(t, []int{1, 3}, slices.Delete(s, 1, 2))
 }
+
+func TestSliceConcat(t *testing.T) {
+	var s0 []int
+	s1 := []int{1, 2}
+	s2 := []int{3, 4}
+	s3 := []int{5, 6}
+	assert.Equal(t, []int{1, 2, 3, 4, 5, 6}, slices.Concat(s0, s1, s2, s3))
+}
