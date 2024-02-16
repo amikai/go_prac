@@ -1,24 +1,29 @@
 package goroutineex
 
 import (
-	"fmt"
+	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func doSomething() {
 	time.Sleep(2 * time.Second)
 }
 
-func ExampleTimeAfter() {
+func TestTimeAfter(t *testing.T) {
 	ch := make(chan struct{}, 1)
+	var final string
+
 	go func() {
 		doSomething()
 		ch <- struct{}{}
 	}()
 	select {
 	case <-ch:
-		fmt.Printf("doSomething")
+		final = "ch"
 	case <-time.After(3 * time.Second):
-		fmt.Printf("after 3 second")
+		final = "time.After"
 	}
+	assert.Equal(t, "ch", final)
 }
