@@ -12,7 +12,6 @@ func TestConcWg(t *testing.T) {
 	wg := conc.NewWaitGroup()
 
 	for i, url := range searchURLs {
-		i, url := i, url
 		wg.Go(func() {
 			result, err := fakeSearch(url)
 			if err != nil {

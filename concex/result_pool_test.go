@@ -15,7 +15,6 @@ func TestResultPool(t *testing.T) {
 	var p *pool.ResultPool[string] = pool.NewWithResults[string]().WithMaxGoroutines(runtime.NumCPU())
 
 	for _, url := range searchURLs {
-		url := url
 		p.Go(func() string {
 			result, _ := fakeSearch(url)
 			return result
@@ -31,7 +30,6 @@ func TestResultErrPool(t *testing.T) {
 	failedIndex := rand.Intn(len(searchURLs))
 	failedIndex2 := rand.Intn(len(searchURLs))
 	for i, url := range searchURLs {
-		i, url := i, url
 		p.Go(func() (string, error) {
 			if i == failedIndex || i == failedIndex2 {
 				_, err := fakeSearchMustErr(url)
@@ -64,7 +62,6 @@ func TestResultErrPoolCollected(t *testing.T) {
 	failedIndex := rand.Intn(len(searchURLs))
 	failedIndex2 := rand.Intn(len(searchURLs))
 	for i, url := range searchURLs {
-		i, url := i, url
 		p.Go(func() (string, error) {
 			if i == failedIndex || i == failedIndex2 {
 				_, err := fakeSearchMustErr(url)
@@ -96,7 +93,6 @@ func TestResultContextPoolCancelOnError(t *testing.T) {
 	var p *pool.ResultContextPool[string] = pool.NewWithResults[string]().WithMaxGoroutines(runtime.NumCPU()).WithContext(context.Background()).WithCancelOnError()
 	failedIndex := rand.Intn(len(searchURLs))
 	for i, url := range searchURLs {
-		i, url := i, url
 		p.Go(func(ctx context.Context) (string, error) {
 			if i == failedIndex {
 				return fakeSearchMustErr(url)

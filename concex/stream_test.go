@@ -14,7 +14,6 @@ func TestStream(t *testing.T) {
 	s := stream.New().WithMaxGoroutines(runtime.NumCPU())
 	var got []string
 	for _, url := range searchURLs {
-		url := url
 		s.Go(func() stream.Callback {
 			result, _ := fakeSearch(url)
 			return func() { got = append(got, result) }

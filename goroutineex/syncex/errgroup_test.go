@@ -29,7 +29,6 @@ func TestErrGroup(t *testing.T) {
 	g, _ := errgroup.WithContext(context.Background())
 
 	for i, url := range urls {
-		i, url := i, url
 		g.Go(func() error {
 			result, err := fakeSearch(url)
 			if err != nil {

@@ -28,7 +28,6 @@ func TestErrPool(t *testing.T) {
 	var p *pool.ErrorPool = pool.New().WithErrors().WithMaxGoroutines(runtime.NumCPU())
 
 	for i, url := range searchURLs {
-		i, url := i, url
 		p.Go(func() error {
 			if i == 0 {
 				time.Sleep(time.Second)
@@ -48,7 +47,6 @@ func TestContextPoolSuccess(t *testing.T) {
 	var p *pool.ContextPool = pool.New().WithContext(context.Background()).WithMaxGoroutines(runtime.NumCPU())
 
 	for _, url := range searchURLs {
-		url := url
 		p.Go(func(ctx context.Context) error {
 			_, err := fakeSearchCtx(ctx, url)
 			if err != nil {
@@ -68,7 +66,6 @@ func TestContextPoolTimeout(t *testing.T) {
 	var p *pool.ContextPool = pool.New().WithContext(ctx).WithMaxGoroutines(runtime.NumCPU())
 
 	for _, url := range searchURLs {
-		url := url
 		p.Go(func(ctx context.Context) error {
 			_, err := fakeSearchCtxWithDuration(ctx, url, 1*time.Second)
 			if err != nil {
@@ -96,7 +93,6 @@ func TestContextPoolCancelOnError(t *testing.T) {
 
 	failedIndex := 3
 	for i, url := range searchURLs {
-		i, url := i, url
 		p.Go(func(ctx context.Context) error {
 			if i == failedIndex {
 				_, err := fakeSearchMustErr(url)
