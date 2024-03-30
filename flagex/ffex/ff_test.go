@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/peterbourgon/ff"
+	"github.com/peterbourgon/ff/v4"
 	"github.com/peterbourgon/ff/v4/ffyaml"
 	"github.com/stretchr/testify/assert"
 )

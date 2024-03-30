@@ -14,8 +14,7 @@ require (
 	github.com/lossdev/stack v1.0.5
 	github.com/oklog/run v1.1.1-0.20240127200640-eee6e044b77c
 	github.com/patrickmn/go-cache v2.1.0+incompatible
-	github.com/peterbourgon/ff v1.7.1
-	github.com/peterbourgon/ff/v4 v4.0.0-alpha.1
+	github.com/peterbourgon/ff/v4 v4.0.0-alpha.4
 	github.com/prometheus/client_golang v1.18.0
 	github.com/redis/go-redis/v9 v9.3.0
 	github.com/redis/rueidis v1.0.31
@@ -75,7 +74,6 @@ require (
 	golang.org/x/net v0.19.0 // indirect
 	golang.org/x/sys v0.17.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
-	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
