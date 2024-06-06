@@ -8,10 +8,10 @@ import (
 )
 
 func TestConcWg(t *testing.T) {
-	results := make([]string, len(searchURLs))
+	results := make([]string, len(SearchURLs))
 	wg := conc.NewWaitGroup()
 
-	for i, url := range searchURLs {
+	for i, url := range SearchURLs {
 		wg.Go(func() {
 			result, err := fakeSearch(url)
 			if err != nil {

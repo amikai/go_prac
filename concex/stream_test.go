@@ -13,7 +13,7 @@ func TestStream(t *testing.T) {
 	// Callbacks are called in the same order that tasks are submitted.
 	s := stream.New().WithMaxGoroutines(runtime.NumCPU())
 	var got []string
-	for _, url := range searchURLs {
+	for _, url := range SearchURLs {
 		s.Go(func() stream.Callback {
 			result, _ := fakeSearch(url)
 			return func() { got = append(got, result) }

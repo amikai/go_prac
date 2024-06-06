@@ -18,11 +18,11 @@ func fakeSearch(url string) (string, error) {
 	return fakeResultPrefix + url, nil
 }
 
-func fakeSearchMustErr(url string) (string, error) {
+func FakeSearchMustErr(url string) (string, error) {
 	return "", searchErrs[url]
 }
 
-func fakeSearchErrCtxWithDuration(ctx context.Context, url string, t time.Duration) (string, error) {
+func FakeSearchErrCtxWithDuration(ctx context.Context, url string, t time.Duration) (string, error) {
 	select {
 	case <-ctx.Done():
 		return "", ctx.Err()
@@ -35,7 +35,7 @@ func fakeSearchCtx(_ context.Context, url string) (string, error) {
 	return fakeResultPrefix + url, nil
 }
 
-func fakeSearchCtxWithDuration(ctx context.Context, url string, t time.Duration) (string, error) {
+func FakeSearchCtxWithDuration(ctx context.Context, url string, t time.Duration) (string, error) {
 	select {
 	case <-ctx.Done():
 		return "", ctx.Err()
@@ -44,7 +44,7 @@ func fakeSearchCtxWithDuration(ctx context.Context, url string, t time.Duration)
 	}
 }
 
-var searchURLs = []string{
+var SearchURLs = []string{
 	"https://www.google.com",
 	"https://www.yahoo.com",
 	"https://www.amazon.com",
@@ -70,9 +70,9 @@ var searchErrs = map[string]error{
 	"https://www.walmart.com":         errors.New("network failed when searching https://www.walmart.com"),
 }
 
-// searchErr return the correspond error for each url
+// SearchErr return the correspond error for each url
 // if len(errs) > 0, then wrap errs to new error
-func searchErr(url string, errs ...error) error {
+func SearchErr(url string, errs ...error) error {
 	retErr := searchErrs[url]
 	if len(errs) == 0 {
 		return retErr
@@ -81,6 +81,12 @@ func searchErr(url string, errs ...error) error {
 		retErr = fmt.Errorf("%w: %w", retErr, err)
 	}
 	return retErr
+}
+
+func RandomFailURLIndex() int {
+	source := rand.NewSource(time.Now().UnixNano())
+	random := rand.New(source)
+	return random.Intn(len(SearchURLs))
 }
 
 var expSearchResult = []string{

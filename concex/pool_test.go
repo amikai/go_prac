@@ -13,7 +13,7 @@ import (
 func TestPool(t *testing.T) {
 	var p *pool.Pool = pool.New().WithMaxGoroutines(runtime.NumCPU())
 
-	for _, url := range searchURLs {
+	for _, url := range SearchURLs {
 		url := url
 		// Be careful!!! if goroutines in pool are busy, p.Go will be blocked
 		p.Go(func() {
@@ -27,26 +27,26 @@ func TestErrPool(t *testing.T) {
 	// ErrPool will wait all task done, and join (errors.Join) the error
 	var p *pool.ErrorPool = pool.New().WithErrors().WithMaxGoroutines(runtime.NumCPU())
 
-	for i, url := range searchURLs {
+	for i, url := range SearchURLs {
 		p.Go(func() error {
 			if i == 0 {
 				time.Sleep(time.Second)
 			}
-			_, err := fakeSearchMustErr(url)
+			_, err := FakeSearchMustErr(url)
 			return err
 		})
 	}
 	retErr := p.Wait()
 
-	for _, url := range searchURLs {
-		assert.ErrorIs(t, retErr, searchErr(url))
+	for _, url := range SearchURLs {
+		assert.ErrorIs(t, retErr, SearchErr(url))
 	}
 }
 
 func TestContextPoolSuccess(t *testing.T) {
 	var p *pool.ContextPool = pool.New().WithContext(context.Background()).WithMaxGoroutines(runtime.NumCPU())
 
-	for _, url := range searchURLs {
+	for _, url := range SearchURLs {
 		p.Go(func(ctx context.Context) error {
 			_, err := fakeSearchCtx(ctx, url)
 			if err != nil {
@@ -65,12 +65,12 @@ func TestContextPoolTimeout(t *testing.T) {
 	// ContextPool runs tasks that take a context, and join (errors.Join) the error
 	var p *pool.ContextPool = pool.New().WithContext(ctx).WithMaxGoroutines(runtime.NumCPU())
 
-	for _, url := range searchURLs {
+	for _, url := range SearchURLs {
 		p.Go(func(ctx context.Context) error {
-			_, err := fakeSearchCtxWithDuration(ctx, url, 1*time.Second)
+			_, err := FakeSearchCtxWithDuration(ctx, url, 1*time.Second)
 			if err != nil {
 				// searchErr will wrap err
-				return searchErr(url, err)
+				return SearchErr(url, err)
 			}
 			return nil
 		})
@@ -78,8 +78,8 @@ func TestContextPoolTimeout(t *testing.T) {
 
 	retErr := p.Wait()
 	assert.ErrorIs(t, retErr, context.DeadlineExceeded)
-	for _, url := range searchURLs {
-		assert.ErrorIs(t, retErr, searchErr(url))
+	for _, url := range SearchURLs {
+		assert.ErrorIs(t, retErr, SearchErr(url))
 	}
 }
 
@@ -92,14 +92,14 @@ func TestContextPoolCancelOnError(t *testing.T) {
 		WithMaxGoroutines(runtime.NumCPU())
 
 	failedIndex := 3
-	for i, url := range searchURLs {
+	for i, url := range SearchURLs {
 		p.Go(func(ctx context.Context) error {
 			if i == failedIndex {
-				_, err := fakeSearchMustErr(url)
+				_, err := FakeSearchMustErr(url)
 				return err
 			}
 
-			_, err := fakeSearchCtxWithDuration(ctx, url, 1*time.Second)
+			_, err := FakeSearchCtxWithDuration(ctx, url, 1*time.Second)
 			if err != nil {
 				return err
 			}
@@ -109,5 +109,5 @@ func TestContextPoolCancelOnError(t *testing.T) {
 
 	retErr := p.Wait()
 	assert.ErrorIs(t, retErr, context.Canceled)
-	assert.ErrorIs(t, retErr, searchErr(searchURLs[failedIndex]))
+	assert.ErrorIs(t, retErr, SearchErr(SearchURLs[failedIndex]))
 }
