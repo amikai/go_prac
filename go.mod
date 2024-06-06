@@ -6,6 +6,7 @@ require (
 	github.com/alicebob/miniredis/v2 v2.31.0
 	github.com/danielgtaylor/huma/v2 v2.18.0
 	github.com/deckarep/golang-set/v2 v2.6.0
+	github.com/destel/rill v0.1.2
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-chi/chi/v5 v5.0.12
 	github.com/go-redis/redis_rate/v10 v10.0.1
@@ -22,7 +23,7 @@ require (
 	github.com/sourcegraph/conc v0.3.0
 	github.com/spf13/viper v1.13.0
 	github.com/stretchr/testify v1.9.0
-	go.uber.org/zap v1.25.0
+	go.uber.org/zap v1.27.0
 	go.uber.org/zap/exp v0.2.0
 	golang.org/x/exp v0.0.0-20240604190554-fc45aab8b7f8
 	golang.org/x/sync v0.7.0
@@ -38,7 +39,6 @@ require (
 	github.com/cloudwego/base64x v0.1.4 // indirect
 	github.com/cloudwego/iasm v0.2.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/destel/rill v0.1.2 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
 	github.com/fxamacker/cbor/v2 v2.6.0 // indirect

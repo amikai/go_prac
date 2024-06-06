@@ -60,6 +60,26 @@ func TestLoggerLog(t *testing.T) {
 	assert.Equal(t, want, buf.String())
 }
 
+func TestLoggerLogNestedJson(t *testing.T) {
+	buf := strings.Builder{}
+	logger := newExampleLogger(&buf)
+	defer logger.Sync()
+
+	logger.Info("personal info", zap.Dict("Amikai info", zap.Int("age", 18), zap.String("id", "123"), zap.Bool("is married", false)))
+	want := `
+{
+  "level": "info",
+  "msg": "personal info",
+  "Amikai info": {
+    "age": 18,
+    "id": "123",
+    "is married": false
+  }
+}
+`
+	assert.JSONEq(t, want, buf.String())
+}
+
 func TestMust(t *testing.T) {
 	assert.NotPanics(t, func() {
 		_ = zap.Must(zap.NewProduction())
