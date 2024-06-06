@@ -101,13 +101,15 @@ func TestZapGlobalLogger(t *testing.T) {
 	assert.Equal(t, want, buf.String())
 }
 
-func TestSuggar(t *testing.T) {
+func TestSugar(t *testing.T) {
 	buf := strings.Builder{}
 	sl := newExampleLogger(&buf).Sugar()
 	defer sl.Sync()
 
 	sl.Info("Hello", "World!")
+	// formatted string style
 	sl.Infof("%s,%s!", "Hello", "World")
+	// key value pairs style
 	sl.Infow("Amikai info",
 		"age", 18,
 		"id", "123",
