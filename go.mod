@@ -4,6 +4,7 @@ go 1.22.0
 
 require (
 	github.com/alicebob/miniredis/v2 v2.31.0
+	github.com/danielgtaylor/huma/v2 v2.18.0
 	github.com/deckarep/golang-set/v2 v2.6.0
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-chi/chi/v5 v5.0.12
@@ -39,6 +40,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
+	github.com/fxamacker/cbor/v2 v2.6.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.4 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
@@ -68,6 +70,7 @@ require (
 	github.com/subosito/gotenv v1.4.1 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect
+	github.com/x448/float16 v0.8.4 // indirect
 	github.com/yuin/gopher-lua v1.1.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/arch v0.8.0 // indirect
