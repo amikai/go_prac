@@ -15,6 +15,9 @@ const concLimit = 8
 
 func TestForEach(t *testing.T) {
 	ctx := context.Background()
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
 	urls := rill.FromSlice(concex.SearchURLs, nil)
 	err := rill.ForEach(urls, concLimit, func(url string) error {
 		_, err := concex.FakeSearchCtxWithDuration(ctx, url, time.Second)
@@ -30,6 +33,7 @@ func TestForEachErr(t *testing.T) {
 
 	failIndex := concex.RandomFailURLIndex()
 
+	// See https://github.com/destel/rill/issues/19#issuecomment-2151875524 for detail explanation
 	urls := rill.FromSlice(concex.SearchURLs, nil)
 	// terminate early on the first error
 	// for each does not guarantee the order of the results
@@ -42,8 +46,5 @@ func TestForEachErr(t *testing.T) {
 		return err
 	})
 	// enconter first error, then cancel the tasks
-	if err != nil {
-		cancel()
-	}
 	assert.ErrorIs(t, err, concex.SearchErr(concex.SearchURLs[failIndex]))
 }
