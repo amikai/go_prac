@@ -5,12 +5,10 @@ import (
 	"net/http"
 
 	"github.com/amikai/go_prac/httpex/db"
-	"github.com/go-chi/chi/v5"
 )
 
 func ProductHandler(w http.ResponseWriter, r *http.Request) {
-	id := chi.URLParam(r, "id")
-
+	id := r.PathValue("id")
 	resp := Resp[*db.Product]{
 		Data: db.GetProductByID(id),
 	}
@@ -26,7 +24,7 @@ func ProductHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func BooksCategoryHandler(w http.ResponseWriter, r *http.Request) {
-	category := chi.URLParam(r, "category")
+	category := r.PathValue("category")
 	resp := Resp[[]*db.Book]{
 		Data: db.GetBooksByCategory(category),
 	}
@@ -42,7 +40,7 @@ func BooksCategoryHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func BooksHandler(w http.ResponseWriter, r *http.Request) {
-	id := chi.URLParam(r, "id")
+	id := r.PathValue("id")
 	resp := Resp[*db.Book]{
 		Data: db.GetBooksByID(id),
 	}
