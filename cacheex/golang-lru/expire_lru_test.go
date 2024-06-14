@@ -16,7 +16,7 @@ func TestExpirableLru(t *testing.T) {
 
 	got, ok := c.Get("key")
 	assert.True(t, ok)
-	assert.Equal(t, got, "value")
+	assert.Equal(t, "value", got)
 }
 
 func TestExpirableLruExpire(t *testing.T) {
@@ -28,7 +28,7 @@ func TestExpirableLruExpire(t *testing.T) {
 	// before expiration
 	got, ok := c.Get("key")
 	assert.True(t, ok)
-	assert.Equal(t, got, "value")
+	assert.Equal(t, "value", got)
 
 	time.Sleep(time.Microsecond * 15)
 

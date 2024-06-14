@@ -49,7 +49,7 @@ func TestCacheExpired(t *testing.T) {
 	testConcGet(t, c, "two", 2)
 
 	time.Sleep(200 * time.Millisecond)
-	// alread expired
+	// already expired
 	_, ok := c.Get("zero")
 	assert.False(t, ok)
 	_, ok = c.Get("one")
