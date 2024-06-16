@@ -25,6 +25,7 @@ require (
 	github.com/sourcegraph/conc v0.3.0
 	github.com/spf13/viper v1.13.0
 	github.com/stretchr/testify v1.9.0
+	go.uber.org/goleak v1.3.0
 	go.uber.org/zap v1.27.0
 	go.uber.org/zap/exp v0.2.0
 	golang.org/x/exp v0.0.0-20240604190554-fc45aab8b7f8
