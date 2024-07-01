@@ -4,9 +4,11 @@ go 1.22.0
 
 require (
 	github.com/alicebob/miniredis/v2 v2.31.0
+	github.com/allegro/bigcache/v3 v3.1.0
 	github.com/danielgtaylor/huma/v2 v2.18.0
 	github.com/deckarep/golang-set/v2 v2.6.0
-	github.com/destel/rill v0.1.2
+	github.com/destel/rill v0.2.0
+	github.com/dgraph-io/ristretto v0.1.1
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-chi/chi/v5 v5.0.12
 	github.com/go-redis/redis_rate/v10 v10.0.1
@@ -32,7 +34,6 @@ require (
 
 require (
 	github.com/alicebob/gopher-json v0.0.0-20200520072559-a9ecdc9d1d3a // indirect
-	github.com/allegro/bigcache/v3 v3.1.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bytedance/sonic v1.11.8 // indirect
 	github.com/bytedance/sonic/loader v0.1.1 // indirect
@@ -40,7 +41,6 @@ require (
 	github.com/cloudwego/base64x v0.1.4 // indirect
 	github.com/cloudwego/iasm v0.2.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/dgraph-io/ristretto v0.1.1 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/dustin/go-humanize v1.0.0 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
