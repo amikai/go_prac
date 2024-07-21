@@ -57,7 +57,7 @@ func (s *ThreadSafeMutexStack[T]) Pop() (T, error) {
 	ret = s.stack[s.top]
 	s.top--
 	if (s.top+1)*2 < len(s.stack) {
-		slices.Delete(s.stack, s.top+1, len(s.stack)-1)
+		s.stack = slices.Delete(s.stack, s.top+1, len(s.stack)-1)
 	}
 	return ret, nil
 }
