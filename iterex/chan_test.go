@@ -25,8 +25,10 @@ func All[Ch chan E, E any](ch Ch) iter.Seq[E] {
 	return func(yield func(E) bool) {
 		defer func() {
 			// drain the channel
-			for range ch {
-			}
+			go func() {
+				for range ch {
+				}
+			}()
 		}()
 		for v := range ch {
 			if !yield(v) {
