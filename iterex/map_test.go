@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func ExampleMapsAll() {
+func Example_mapsAll() {
 	m := map[string]int{"a": 1, "b": 2, "c": 3}
 	for i, v := range maps.All(m) {
 		fmt.Printf("%s, %d\n", i, v)

@@ -1,49 +1,59 @@
 package builtin
 
 import (
-	"fmt"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
-func ExampleMin() {
-	a := min(1, 2, 3)
-	fmt.Println("min(1,2,3)=", a)
+func TestMin(t *testing.T) {
+	t.Run("min(1,2,3)", func(t *testing.T) {
+		got := min(1, 2, 3)
+		want := 1
+		assert.Equal(t, want, got)
+	})
 
-	b := min(1.0, 2.0, 3.0)
-	fmt.Println("min(1.0,2.0,3.0)=", b)
+	t.Run("min(1.0,2.0,3.0)", func(t *testing.T) {
+		got := min(1.0, 2.0, 3.0)
+		want := 1.0
+		assert.Equal(t, want, got)
+	})
 
-	c := min(1, 2.0, 3)
-	fmt.Println("min(1,2.0,3)=", c)
+	t.Run("min(1.0,2.0,3)", func(t *testing.T) {
+		got := min(1.0, 2.0, 3)
+		want := 1.0
+		assert.Equal(t, want, got)
+	})
 
-	d := min("a", "b", "c")
-	fmt.Println(`min("a","b","c")=`, d)
-
-	// _ = min(s...), this syntax is invalid, See: slices.Min
-
-	// Output:
-	// min(1,2,3)= 1
-	// min(1.0,2.0,3.0)= 1
-	// min(1,2.0,3)= 1
-	// min("a","b","c")= a
+	t.Run("min(1,2.0,3.0)", func(t *testing.T) {
+		got := min(1, 2.0, 3.0)
+		want := 1.0
+		assert.Equal(t, want, got)
+	})
 }
 
-func ExampleMax() {
-	a := max(1, 2, 3)
-	fmt.Println("min(1,2,3)=", a)
+func TestMax(t *testing.T) {
+	t.Run("max(1, 2, 3)", func(t *testing.T) {
+		got := max(1, 2, 3)
+		want := 3
+		assert.Equal(t, want, got)
+	})
 
-	b := max(1.0, 2.0, 3.0)
-	fmt.Println("min(1.0,2.0,3.0)=", b)
+	t.Run("max(1.0, 2.0, 3.0)", func(t *testing.T) {
+		got := max(1.0, 2.0, 3.0)
+		want := 3.0
+		assert.Equal(t, want, got)
+	})
 
-	c := max(1, 2.0, 3)
-	fmt.Println("min(1,2.0,3)=", c)
+	t.Run("max(1.0,2.0,3)", func(t *testing.T) {
+		got := max(1.0, 2.0, 3)
+		want := 3.0
+		assert.Equal(t, want, got)
+	})
 
-	d := max("a", "b", "c")
-	fmt.Println(`min("a","b","c")=`, d)
-
-	// _ = max(s...), this syntax is invalid, See: slices.Max
-
-	// Output:
-	// min(1,2,3)= 3
-	// min(1.0,2.0,3.0)= 3
-	// min(1,2.0,3)= 3
-	// min("a","b","c")= c
+	t.Run("max(1,2.0,3.0)", func(t *testing.T) {
+		got := max(1, 2.0, 3.0)
+		want := 3.0
+		assert.Equal(t, want, got)
+	})
 }

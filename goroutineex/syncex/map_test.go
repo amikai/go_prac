@@ -3,10 +3,9 @@ package syncex
 import (
 	"fmt"
 	"sync"
-	"testing"
 )
 
-func ExampleMapRange(t *testing.T) {
+func Example_syncMapRange() {
 	var m sync.Map
 
 	m.Store("alice", 11)
@@ -18,13 +17,13 @@ func ExampleMapRange(t *testing.T) {
 		return true
 	})
 
-	// Output:
+	// Unordered Output:
 	// alice 11
 	// bob 12
 	// cindy 13
 }
 
-func ExampleMapRangeForRange(t *testing.T) {
+func Example_syncMapRangeFor() {
 	var m sync.Map
 
 	m.Store("alice", 11)
@@ -35,7 +34,7 @@ func ExampleMapRangeForRange(t *testing.T) {
 		fmt.Println(key, value)
 	}
 
-	// Output:
+	// Unordered Output:
 	// alice 11
 	// bob 12
 	// cindy 13

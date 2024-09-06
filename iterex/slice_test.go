@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func ExampleSliceAll() {
+func Example_slicesAll() {
 	arr := []int{0, 1, 2, 3, 4}
 	for i, v := range slices.All(arr) {
 		fmt.Printf("%d, %d\n", i, v)
@@ -22,7 +22,7 @@ func ExampleSliceAll() {
 	// 4, 4
 }
 
-func ExampleSliceAll2() {
+func Example_slicesAll2() {
 	arr := []int{0, 1, 2, 3, 4}
 	slices.All(arr)(func(i int, v int) bool {
 		fmt.Printf("%d, %d\n", i, v)
@@ -45,7 +45,7 @@ func TestAppendSeq(t *testing.T) {
 	assert.Equal(t, []int{0, 1, 2, 3, 4, 5}, arr)
 }
 
-func ExampleSliceBackward() {
+func Example_slicesBackward() {
 	arr := []int{0, 1, 2, 3, 4}
 	for i, v := range slices.Backward(arr) {
 		fmt.Printf("%d, %d\n", i, v)
@@ -59,7 +59,7 @@ func ExampleSliceBackward() {
 	// 0, 0
 }
 
-func ExampleSliceCollect() {
+func Example_slicesCollect() {
 	seq := slices.Values([]int{0, 1, 2})
 	// convert seq to slice
 	arr := slices.Collect(seq)
@@ -73,7 +73,7 @@ func ExampleSliceCollect() {
 	// 2, 2
 }
 
-func ExampleSliceSorted() {
+func Example_slicesSorted() {
 	seq := slices.Values([]int{0, 2, 1})
 	// convert seq to slice
 	arr := slices.Sorted(seq)
