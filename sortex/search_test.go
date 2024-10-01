@@ -46,7 +46,7 @@ func TestSortSearchLowerBound(t *testing.T) {
 func TestSortSearchUpperBound(t *testing.T) {
 	arr := []int{1, 3, 3, 3, 9}
 
-	lowerBoundFunc := func(s []int, target int) (int, func(i int) bool) {
+	upperBoundFunc := func(s []int, target int) (int, func(i int) bool) {
 		return len(s), func(i int) bool {
 			return s[i] > target
 		}
@@ -54,24 +54,24 @@ func TestSortSearchUpperBound(t *testing.T) {
 	// x = 3, p = 4
 	// 1 3 3 3 9
 	//         ^
-	p := sort.Search(lowerBoundFunc(arr, 3))
+	p := sort.Search(upperBoundFunc(arr, 3))
 	assert.Equal(t, 4, p)
 
 	// x = 9, p = 5
 	// 1 3 3 3 9
 	//           ^
-	p = sort.Search(lowerBoundFunc(arr, 9))
+	p = sort.Search(upperBoundFunc(arr, 9))
 	assert.Equal(t, 5, p)
 
 	// x = 0 (not in v), p = 0
 	// 1 3 3 3 9
 	// ^
-	p = sort.Search(lowerBoundFunc(arr, 0))
+	p = sort.Search(upperBoundFunc(arr, 0))
 	assert.Equal(t, 0, p)
 
 	// x = 10 (not in v), p = 5
 	// 1 3 3 3 9
 	//           ^
-	p = sort.Search(lowerBoundFunc(arr, 10))
+	p = sort.Search(upperBoundFunc(arr, 10))
 	assert.Equal(t, 5, p)
 }
