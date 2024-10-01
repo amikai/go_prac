@@ -1,6 +1,7 @@
 package sortex
 
 import (
+	"slices"
 	"sort"
 	"testing"
 
@@ -113,6 +114,39 @@ func TestSortFindLowerBound(t *testing.T) {
 	// 1 3 3 3 9
 	//           ^
 	p, exist = sort.Find(lowerBoundFunc(arr, 10))
+	assert.Equal(t, 5, p)
+	assert.False(t, exist)
+}
+
+// slice.BinarySearch work likes lower_bound in C++
+func TestSliceBinarySearch(t *testing.T) {
+	arr := []int{1, 3, 3, 3, 9}
+
+	// x = 3, p = 1
+	// 1 3 3 3 9
+	//   ^
+	p, exist := slices.BinarySearch(arr, 3)
+	assert.Equal(t, 1, p)
+	assert.True(t, exist)
+
+	// x = 4 (not in v), p = 4
+	// 1 3 3 3 9
+	//         ^
+	p, exist = slices.BinarySearch(arr, 4)
+	assert.Equal(t, 4, p)
+	assert.False(t, exist)
+
+	// x = 0 (not in v), p = 0
+	// 1 3 3 3 9
+	// ^
+	p, exist = slices.BinarySearch(arr, 0)
+	assert.Equal(t, 0, p)
+	assert.False(t, exist)
+
+	// x = 10 (not in v), p = 5
+	// 1 3 3 3 9
+	//           ^
+	p, exist = slices.BinarySearch(arr, 10)
 	assert.Equal(t, 5, p)
 	assert.False(t, exist)
 }
