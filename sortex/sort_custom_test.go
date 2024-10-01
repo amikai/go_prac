@@ -59,7 +59,7 @@ func (p ByAgeDecreasing) Less(i, j int) bool {
 
 // use 1.8 sort.Slice
 // if age is the same, sort by name in lexicographical order
-func SortPeopleByAgeIncreasing(t *testing.T) {
+func TestSortPeopleByAgeIncreasing(t *testing.T) {
 	sort.Slice(persons, func(i, j int) bool {
 		if persons[i].Age == persons[j].Age {
 			return persons[i].Name < persons[j].Name
@@ -69,15 +69,15 @@ func SortPeopleByAgeIncreasing(t *testing.T) {
 	assert.Equal(t, []*Person{
 		{"Alice", 25},
 		{"Bob", 25},
-		{"Mary", 30},
 		{"John", 30},
+		{"Mary", 30},
 		{"Paul", 50},
 	}, persons)
 }
 
 // use 1.21 slices.SortFunc
 // if age is the same, sort by name in lexicographical order
-func SliceSortPeopleByAgeIncreasing(t *testing.T) {
+func TestSliceSortPeopleByAgeIncreasing(t *testing.T) {
 	slices.SortFunc(persons, func(a, b *Person) int {
 		if a.Age == b.Age {
 			return strings.Compare(a.Name, b.Name)
@@ -87,15 +87,15 @@ func SliceSortPeopleByAgeIncreasing(t *testing.T) {
 	assert.Equal(t, []*Person{
 		{"Alice", 25},
 		{"Bob", 25},
-		{"Mary", 30},
 		{"John", 30},
+		{"Mary", 30},
 		{"Paul", 50},
 	}, persons)
 }
 
 // use 1.8 sort.Slice
 // if age is the same, sort by name in lexicographical order
-func SortPeopleByAgeDecreasing(t *testing.T) {
+func TestSortPeopleByAgeDecreasing(t *testing.T) {
 	sort.Slice(persons, func(i, j int) bool {
 		if persons[i].Age == persons[j].Age {
 			return persons[i].Name < persons[j].Name
@@ -113,7 +113,7 @@ func SortPeopleByAgeDecreasing(t *testing.T) {
 
 // use 1.21 slices.SortFunc
 // if age is the same, sort by name in lexicographical order
-func SliceSortPeopleByAgeDecreasing(t *testing.T) {
+func TestSliceSortPeopleByAgeDecreasing(t *testing.T) {
 	slices.SortFunc(persons, func(a, b *Person) int {
 		if a.Age == b.Age {
 			return strings.Compare(a.Name, b.Name)
@@ -121,26 +121,26 @@ func SliceSortPeopleByAgeDecreasing(t *testing.T) {
 		return b.Age - a.Age
 	})
 	assert.Equal(t, []*Person{
+		{"Paul", 50},
+		{"John", 30},
+		{"Mary", 30},
 		{"Alice", 25},
 		{"Bob", 25},
-		{"Mary", 30},
-		{"John", 30},
-		{"Paul", 50},
 	}, persons)
 }
 
-func SortPeopleByAgeIncreasingInterface(t *testing.T) {
+func TestSortPeopleByAgeIncreasingInterface(t *testing.T) {
 	sort.Sort(ByAgeIncreasing(persons))
 	assert.Equal(t, []*Person{
 		{"Alice", 25},
 		{"Bob", 25},
-		{"Mary", 30},
 		{"John", 30},
+		{"Mary", 30},
 		{"Paul", 50},
 	}, persons)
 }
 
-func SortPeopleByAgeDecreasingInterface(t *testing.T) {
+func TestSortPeopleByAgeDecreasingInterface(t *testing.T) {
 	sort.Sort(ByAgeDecreasing(persons))
 	assert.Equal(t, []*Person{
 		{"Paul", 50},
