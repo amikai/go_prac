@@ -75,3 +75,44 @@ func TestSortSearchUpperBound(t *testing.T) {
 	p = sort.Search(upperBoundFunc(arr, 10))
 	assert.Equal(t, 5, p)
 }
+
+// sort.Find is more easy to used than sort.Search
+// sort.Find will check the target will exist in the slice or not, but sort.Search will not
+func TestSortFindLowerBound(t *testing.T) {
+	arr := []int{1, 3, 3, 3, 9}
+
+	// Find uses binary search to find and return the smallest index i in [0, n)
+	// at which cmp(i) <= 0. If there is no such index i, Find returns i = n.
+	lowerBoundFunc := func(a []int, target int) (int, func(int) int) {
+		return len(a), func(i int) int {
+			return target - a[i]
+		}
+	}
+	// x = 3, p = 1
+	// 1 3 3 3 9
+	//   ^
+	p, exist := sort.Find(lowerBoundFunc(arr, 3))
+	assert.Equal(t, 1, p)
+	assert.True(t, exist)
+
+	// x = 4 (not in v), p = 4
+	// 1 3 3 3 9
+	//         ^
+	p, exist = sort.Find(lowerBoundFunc(arr, 4))
+	assert.Equal(t, 4, p)
+	assert.False(t, exist)
+
+	// x = 0 (not in v), p = 0
+	// 1 3 3 3 9
+	// ^
+	p, exist = sort.Find(lowerBoundFunc(arr, 0))
+	assert.Equal(t, 0, p)
+	assert.False(t, exist)
+
+	// x = 10 (not in v), p = 5
+	// 1 3 3 3 9
+	//           ^
+	p, exist = sort.Find(lowerBoundFunc(arr, 10))
+	assert.Equal(t, 5, p)
+	assert.False(t, exist)
+}
