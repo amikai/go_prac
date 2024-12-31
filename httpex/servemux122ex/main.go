@@ -68,7 +68,7 @@ func main() {
 
 	err := g.Wait()
 	if errors.Is(err, context.Canceled) || err == nil {
-		logger.Info("gracefully quit gorilla server")
+		logger.Info("gracefully quit server")
 	} else if err != nil {
 		logger.Error(err.Error())
 	}

@@ -11,7 +11,7 @@ import (
 )
 
 func TestHttpHandler(t *testing.T) {
-	contentTypeKey := "Conten-Type"
+	contentTypeKey := "Content-Type"
 	contentTypeVal := "text/html; charset=utf-8"
 	statusCode := http.StatusAccepted
 	bodyContent := "hello world"
