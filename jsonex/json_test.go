@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 type Company struct {
@@ -94,5 +95,27 @@ func TestMarshal(t *testing.T) {
 	got, err := json.Marshal(&company)
 	assert.NoError(t, err)
 	assert.JSONEq(t, want, string(got))
+
+}
+
+type B64Data struct {
+	Data []byte `json:"data"`
+}
+
+func TestUnmarshalB64Data(t *testing.T) {
+	// echo -n 'Hello World' | base64
+	data := []byte(`
+{
+	"data": "SGVsbG8gV29ybGQ="
+}`)
+
+	want := B64Data{
+		Data: []byte("Hello World"),
+	}
+
+	var got B64Data
+	err := json.Unmarshal(data, &got)
+	require.NoError(t, err)
+	assert.Equal(t, got, want)
 
 }
