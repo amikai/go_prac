@@ -2,10 +2,9 @@ package zapex
 
 import (
 	"io"
+	"log/slog"
 	"strings"
 	"testing"
-
-	"log/slog"
 
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap"
@@ -28,7 +27,6 @@ func newExampleLogger(w io.Writer) *zap.Logger {
 	}
 	core := zapcore.NewCore(zapcore.NewJSONEncoder(encoderCfg), zapcore.AddSync(w), zapcore.DebugLevel)
 	return zap.New(core)
-
 }
 
 func TestInitZap(t *testing.T) {
@@ -144,7 +142,7 @@ func TestZapSlogBackend(t *testing.T) {
 	logger := newExampleLogger(&buf)
 	defer logger.Sync()
 
-	sl := slog.New(zapslog.NewHandler(logger.Core(), nil))
+	sl := slog.New(zapslog.NewHandler(logger.Core()))
 
 	sl.Info(
 		"incoming request",
