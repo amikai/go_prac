@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestDoWorkSucess(t *testing.T) {
+func TestDoWorkSuccess(t *testing.T) {
 	workDuration := 3 * time.Millisecond
 	ctx := context.Background()
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Millisecond)
@@ -60,7 +60,6 @@ func TestDeadlineCancelCause(t *testing.T) {
 		assert.ErrorIs(t, ctx.Err(), context.DeadlineExceeded)
 		assert.ErrorIs(t, context.Cause(ctx), causeErr)
 		assert.NotErrorIs(t, ctx.Err(), context.Canceled)
-
 	})
 
 	t.Run("cancel before timeout", func(t *testing.T) {
@@ -79,7 +78,7 @@ func TestDeadlineCancelCause(t *testing.T) {
 		assert.NotErrorIs(t, context.Cause(ctx), causeErr)
 	})
 
-	t.Run("verfiy child or parent context I", func(t *testing.T) {
+	t.Run("verify child or parent context I", func(t *testing.T) {
 		parentCauseErr := errors.New("parent cause")
 		parentCtx, cancel := context.WithTimeoutCause(context.Background(), 1*time.Second, parentCauseErr)
 		defer cancel()
@@ -95,7 +94,7 @@ func TestDeadlineCancelCause(t *testing.T) {
 		assert.ErrorIs(t, context.Cause(childCtx), childCauseErr)
 	})
 
-	t.Run("verfiy child or parent context II", func(t *testing.T) {
+	t.Run("verify child or parent context II", func(t *testing.T) {
 		parentCauseErr := errors.New("parent cause")
 		parentCtx, cancel := context.WithTimeoutCause(context.Background(), 1*time.Second, parentCauseErr)
 		defer cancel()
