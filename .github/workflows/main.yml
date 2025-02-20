@@ -8,7 +8,7 @@ jobs:
   build:
     strategy:
       matrix:
-        gover: ['1.23.x']
+        gover: ['1.24.x']
         platform: [ubuntu-latest]
     runs-on: ${{ matrix.platform }}
     steps:
