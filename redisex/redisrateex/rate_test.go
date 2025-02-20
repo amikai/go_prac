@@ -1,7 +1,6 @@
 package redisrateex
 
 import (
-	"context"
 	"testing"
 	"time"
 
@@ -17,20 +16,19 @@ func TestRateLimiter(t *testing.T) {
 	rdb := redis.NewClient(&redis.Options{
 		Addr: s.Addr(),
 	})
-	ctx := context.Background()
-	err := rdb.FlushDB(ctx).Err()
+	err := rdb.FlushDB(t.Context()).Err()
 	require.NoError(t, err)
 
 	rateLimiter := redis_rate.NewLimiter(rdb)
 	limit := redis_rate.PerHour(1)
 
-	res, err := rateLimiter.Allow(ctx, "test_key", limit)
+	res, err := rateLimiter.Allow(t.Context(), "test_key", limit)
 	require.NoError(t, err)
 	assert.Equal(t, 1, res.Allowed)
 	assert.Equal(t, 0, res.Remaining)
 	assert.Equal(t, time.Duration(-1), res.RetryAfter)
 
-	res, err = rateLimiter.Allow(ctx, "test_key", limit)
+	res, err = rateLimiter.Allow(t.Context(), "test_key", limit)
 	require.NoError(t, err)
 	assert.Equal(t, 0, res.Allowed)
 	assert.Equal(t, 0, res.Remaining)

@@ -44,7 +44,7 @@ func TestErrPool(t *testing.T) {
 }
 
 func TestContextPoolSuccess(t *testing.T) {
-	var p *pool.ContextPool = pool.New().WithContext(context.Background()).WithMaxGoroutines(runtime.NumCPU())
+	var p *pool.ContextPool = pool.New().WithContext(t.Context()).WithMaxGoroutines(runtime.NumCPU())
 
 	for _, url := range SearchURLs {
 		p.Go(func(ctx context.Context) error {
@@ -60,7 +60,7 @@ func TestContextPoolSuccess(t *testing.T) {
 }
 
 func TestContextPoolTimeout(t *testing.T) {
-	ctx, cancel := context.WithTimeout(context.Background(), 500*time.Microsecond)
+	ctx, cancel := context.WithTimeout(t.Context(), 500*time.Microsecond)
 	defer cancel()
 	// ContextPool runs tasks that take a context, and join (errors.Join) the error
 	var p *pool.ContextPool = pool.New().WithContext(ctx).WithMaxGoroutines(runtime.NumCPU())
@@ -87,7 +87,7 @@ func TestContextPoolCancelOnError(t *testing.T) {
 	// ContextPool runs tasks that take a context, and join (errors.Join) the error
 	// WithCancelOnError() setting will cancal context when one task return error
 	var p *pool.ContextPool = pool.New().
-		WithContext(context.Background()).
+		WithContext(t.Context()).
 		WithCancelOnError().
 		WithMaxGoroutines(runtime.NumCPU())
 

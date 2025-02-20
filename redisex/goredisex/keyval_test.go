@@ -1,7 +1,6 @@
 package goredisex
 
 import (
-	"context"
 	"testing"
 
 	"github.com/alicebob/miniredis/v2"
@@ -15,7 +14,7 @@ func TestGetSet(t *testing.T) {
 		Addr: s.Addr(),
 	})
 
-	ctx := context.Background()
+	ctx := t.Context()
 	err := rdb.Set(ctx, "key", "value", 0).Err()
 	assert.NoError(t, err)
 

@@ -19,7 +19,6 @@ func TestGracefulRunReturnEarly(t *testing.T) {
 		assert.NoError(t, err)
 		err = p.Signal(syscall.SIGINT)
 		assert.NoError(t, err)
-
 	})
 
 	errCause := errors.New("cause")
@@ -27,7 +26,6 @@ func TestGracefulRunReturnEarly(t *testing.T) {
 		return errCause
 	}, nil)
 	assert.Equal(t, err, errCause)
-
 }
 
 func TestGracefulSignal(t *testing.T) {
@@ -36,7 +34,6 @@ func TestGracefulSignal(t *testing.T) {
 		assert.NoError(t, err)
 		err = p.Signal(syscall.SIGINT)
 		assert.NoError(t, err)
-
 	})
 
 	err := GracefulRun(func(ctx context.Context) error {
@@ -52,7 +49,6 @@ func TestGracefullyShudownTimeout(t *testing.T) {
 		assert.NoError(t, err)
 		err = p.Signal(syscall.SIGINT)
 		assert.NoError(t, err)
-
 	})
 
 	err := GracefulRun(func(ctx context.Context) error {
@@ -62,13 +58,12 @@ func TestGracefullyShudownTimeout(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-func TestGracefullyShudownToolLong(t *testing.T) {
+func TestGracefullyShutdownToolLong(t *testing.T) {
 	time.AfterFunc(100*time.Millisecond, func() {
 		p, err := os.FindProcess(os.Getpid())
 		assert.NoError(t, err)
 		err = p.Signal(syscall.SIGINT)
 		assert.NoError(t, err)
-
 	})
 
 	err := GracefulRun(func(ctx context.Context) error {
@@ -79,13 +74,12 @@ func TestGracefullyShudownToolLong(t *testing.T) {
 	assert.ErrorIs(t, err, ErrGracefullyTimeout)
 }
 
-func TestHttpGracefullyShudown(t *testing.T) {
+func TestHttpGracefullyShutdown(t *testing.T) {
 	time.AfterFunc(100*time.Millisecond, func() {
 		p, err := os.FindProcess(os.Getpid())
 		assert.NoError(t, err)
 		err = p.Signal(syscall.SIGINT)
 		assert.NoError(t, err)
-
 	})
 
 	err := GracefulRun(func(ctx context.Context) error {

@@ -90,7 +90,7 @@ func TestResultErrPoolCollected(t *testing.T) {
 }
 
 func TestResultContextPoolCancelOnError(t *testing.T) {
-	var p *pool.ResultContextPool[string] = pool.NewWithResults[string]().WithMaxGoroutines(runtime.NumCPU()).WithContext(context.Background()).WithCancelOnError()
+	var p *pool.ResultContextPool[string] = pool.NewWithResults[string]().WithMaxGoroutines(runtime.NumCPU()).WithContext(t.Context()).WithCancelOnError()
 	failedIndex := rand.Intn(len(SearchURLs))
 	for i, url := range SearchURLs {
 		p.Go(func(ctx context.Context) (string, error) {
@@ -109,7 +109,7 @@ func TestResultContextPoolCancelOnError(t *testing.T) {
 }
 
 func TestResultContextPoolCancelOnErrorTimeout(t *testing.T) {
-	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
+	ctx, cancel := context.WithTimeout(t.Context(), 100*time.Millisecond)
 	defer cancel()
 	failedIndex := rand.Intn(len(SearchURLs))
 	var p *pool.ResultContextPool[string] = pool.NewWithResults[string]().WithMaxGoroutines(runtime.NumCPU()).WithContext(ctx)

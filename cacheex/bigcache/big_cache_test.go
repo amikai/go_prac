@@ -1,7 +1,6 @@
 package bigcache
 
 import (
-	"context"
 	"testing"
 	"time"
 
@@ -11,7 +10,7 @@ import (
 )
 
 func TestGet(t *testing.T) {
-	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(1*time.Minute))
+	cache, err := bigcache.New(t.Context(), bigcache.DefaultConfig(1*time.Minute))
 	require.NoError(t, err)
 	defer cache.Close()
 
@@ -24,7 +23,7 @@ func TestGet(t *testing.T) {
 }
 
 func TestDelete(t *testing.T) {
-	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(1*time.Minute))
+	cache, err := bigcache.New(t.Context(), bigcache.DefaultConfig(1*time.Minute))
 	require.NoError(t, err)
 	defer cache.Close()
 

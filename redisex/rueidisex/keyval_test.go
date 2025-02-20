@@ -1,7 +1,6 @@
 package rueidisex
 
 import (
-	"context"
 	"testing"
 
 	"github.com/alicebob/miniredis/v2"
@@ -17,10 +16,9 @@ func TestGetSet(t *testing.T) {
 	require.NoError(t, err)
 	defer client.Close()
 
-	ctx := context.Background()
-	err = client.Do(ctx, client.B().Set().Key("key").Value("val").Build()).Error()
+	err = client.Do(t.Context(), client.B().Set().Key("key").Value("val").Build()).Error()
 	require.NoError(t, err)
-	val, err := client.Do(ctx, client.B().Get().Key("key").Build()).ToString()
+	val, err := client.Do(t.Context(), client.B().Get().Key("key").Build()).ToString()
 	require.NoError(t, err)
 	assert.Equal(t, "val", val)
 }

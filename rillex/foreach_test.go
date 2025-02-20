@@ -14,8 +14,7 @@ import (
 const concLimit = 8
 
 func TestForEach(t *testing.T) {
-	ctx := context.Background()
-	ctx, cancel := context.WithCancel(ctx)
+	ctx, cancel := context.WithCancel(t.Context())
 	defer cancel()
 
 	urls := rill.FromSlice(concex.SearchURLs, nil)
@@ -27,8 +26,7 @@ func TestForEach(t *testing.T) {
 }
 
 func TestForEachErr(t *testing.T) {
-	ctx := context.Background()
-	ctx, cancel := context.WithCancel(ctx)
+	ctx, cancel := context.WithCancel(t.Context())
 	defer cancel()
 
 	failIndex := concex.RandomFailURLIndex()

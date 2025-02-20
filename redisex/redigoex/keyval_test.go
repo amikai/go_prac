@@ -33,17 +33,17 @@ func TestGetSet(t *testing.T) {
 	conn := pool.Get()
 	defer conn.Close()
 
-	resp, err := redis.DoContext(conn, context.Background(), "PING")
+	resp, err := redis.DoContext(conn, t.Context(), "PING")
 	resp, err = redis.String(resp, err)
 	assert.NoError(t, err)
 	assert.Equal(t, resp, "PONG")
 
-	resp, err = redis.DoContext(conn, context.Background(), "SET", "key", "value")
+	resp, err = redis.DoContext(conn, t.Context(), "SET", "key", "value")
 	resp, err = redis.String(resp, err)
 	assert.NoError(t, err)
 	assert.Equal(t, resp, "OK")
 
-	resp, err = redis.DoContext(conn, context.Background(), "GET", "key")
+	resp, err = redis.DoContext(conn, t.Context(), "GET", "key")
 	resp, err = redis.String(resp, err)
 	assert.NoError(t, err)
 	assert.Equal(t, resp, "value")

@@ -1,7 +1,6 @@
 package ratelimitex
 
 import (
-	"context"
 	"testing"
 	"time"
 
@@ -32,7 +31,7 @@ func TestLimiterWait(t *testing.T) {
 
 	assert.True(t, limiter.Allow())
 
-	ctx := context.Background()
+	ctx := t.Context()
 	startTime := time.Now()
 	for i := 0; i < 4; i++ {
 		err := limiter.Wait(ctx)

@@ -1,7 +1,6 @@
 package syncex
 
 import (
-	"context"
 	"runtime"
 	"sync/atomic"
 	"testing"
@@ -26,7 +25,7 @@ func TestErrGroup(t *testing.T) {
 		"https://www.amazon.com",
 	}
 	results := make([]string, len(urls))
-	g, _ := errgroup.WithContext(context.Background())
+	g, _ := errgroup.WithContext(t.Context())
 
 	for i, url := range urls {
 		g.Go(func() error {
@@ -50,7 +49,7 @@ func TestErrGroup(t *testing.T) {
 }
 
 func TestErrGroupSetLimit(t *testing.T) {
-	g, _ := errgroup.WithContext(context.Background())
+	g, _ := errgroup.WithContext(t.Context())
 	g.SetLimit(runtime.NumCPU())
 	t.Logf("errgroup SetLimit(%d)", runtime.NumCPU())
 

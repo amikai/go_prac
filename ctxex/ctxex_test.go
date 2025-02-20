@@ -11,8 +11,7 @@ import (
 
 func TestDoWorkSuccess(t *testing.T) {
 	workDuration := 3 * time.Millisecond
-	ctx := context.Background()
-	ctx, cancel := context.WithTimeout(ctx, 5*time.Millisecond)
+	ctx, cancel := context.WithTimeout(t.Context(), 5*time.Millisecond)
 	defer cancel()
 
 	err := DoWork(ctx, workDuration)
@@ -21,8 +20,7 @@ func TestDoWorkSuccess(t *testing.T) {
 
 func TestDoWorkDeadline(t *testing.T) {
 	workDuration := 3 * time.Millisecond
-	ctx := context.Background()
-	ctx, cancel := context.WithTimeout(ctx, 1*time.Millisecond)
+	ctx, cancel := context.WithTimeout(t.Context(), 1*time.Millisecond)
 	defer cancel()
 
 	err := DoWork(ctx, workDuration)
@@ -31,8 +29,7 @@ func TestDoWorkDeadline(t *testing.T) {
 
 func TestDoWorkCancel(t *testing.T) {
 	workDuration := 3 * time.Millisecond
-	ctx := context.Background()
-	ctx, cancel := context.WithCancel(ctx)
+	ctx, cancel := context.WithCancel(t.Context())
 
 	go func() {
 		time.Sleep(1 * time.Millisecond)
@@ -44,7 +41,7 @@ func TestDoWorkCancel(t *testing.T) {
 
 func TestCancelCause(t *testing.T) {
 	causeErr := errors.New("cause")
-	ctx, cancel := context.WithCancelCause(context.Background())
+	ctx, cancel := context.WithCancelCause(t.Context())
 	cancel(causeErr)
 
 	assert.ErrorIs(t, ctx.Err(), context.Canceled)
@@ -54,7 +51,7 @@ func TestCancelCause(t *testing.T) {
 func TestDeadlineCancelCause(t *testing.T) {
 	t.Run("cancel after timeout", func(t *testing.T) {
 		causeErr := errors.New("cause")
-		ctx, cancel := context.WithTimeoutCause(context.Background(), 0, causeErr)
+		ctx, cancel := context.WithTimeoutCause(t.Context(), 0, causeErr)
 		defer cancel()
 
 		assert.ErrorIs(t, ctx.Err(), context.DeadlineExceeded)
@@ -64,7 +61,7 @@ func TestDeadlineCancelCause(t *testing.T) {
 
 	t.Run("cancel before timeout", func(t *testing.T) {
 		causeErr := errors.New("cause")
-		ctx, cancel := context.WithTimeoutCause(context.Background(), 1*time.Second, causeErr)
+		ctx, cancel := context.WithTimeoutCause(t.Context(), 1*time.Second, causeErr)
 		cancel()
 
 		assert.ErrorIs(t, ctx.Err(), context.Canceled)
@@ -80,7 +77,7 @@ func TestDeadlineCancelCause(t *testing.T) {
 
 	t.Run("verify child or parent context I", func(t *testing.T) {
 		parentCauseErr := errors.New("parent cause")
-		parentCtx, cancel := context.WithTimeoutCause(context.Background(), 1*time.Second, parentCauseErr)
+		parentCtx, cancel := context.WithTimeoutCause(t.Context(), 1*time.Second, parentCauseErr)
 		defer cancel()
 
 		childCauseErr := errors.New("child cause")
@@ -96,7 +93,7 @@ func TestDeadlineCancelCause(t *testing.T) {
 
 	t.Run("verify child or parent context II", func(t *testing.T) {
 		parentCauseErr := errors.New("parent cause")
-		parentCtx, cancel := context.WithTimeoutCause(context.Background(), 1*time.Second, parentCauseErr)
+		parentCtx, cancel := context.WithTimeoutCause(t.Context(), 1*time.Second, parentCauseErr)
 		defer cancel()
 
 		childCauseErr := errors.New("child cause")

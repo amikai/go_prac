@@ -1,7 +1,6 @@
 package slogex
 
 import (
-	"context"
 	"log/slog"
 	"strings"
 	"testing"
@@ -87,10 +86,10 @@ func TestSlogLoggerLogAttr(t *testing.T) {
 	buf := strings.Builder{}
 	logger := slog.New(newExampleJSONHandler(&buf))
 
-	logger.LogAttrs(context.Background(), slog.LevelDebug, "Amikai info", slog.Int("age", 18), slog.String("id", "123"), slog.Bool("is married", false))
-	logger.LogAttrs(context.Background(), slog.LevelInfo, "Amikai info", slog.Int("age", 18), slog.String("id", "123"), slog.Bool("is married", false))
-	logger.LogAttrs(context.Background(), slog.LevelWarn, "Amikai info", slog.Int("age", 18), slog.String("id", "123"), slog.Bool("is married", false))
-	logger.LogAttrs(context.Background(), slog.LevelError, "Amikai info", slog.Int("age", 18), slog.String("id", "123"), slog.Bool("is married", false))
+	logger.LogAttrs(t.Context(), slog.LevelDebug, "Amikai info", slog.Int("age", 18), slog.String("id", "123"), slog.Bool("is married", false))
+	logger.LogAttrs(t.Context(), slog.LevelInfo, "Amikai info", slog.Int("age", 18), slog.String("id", "123"), slog.Bool("is married", false))
+	logger.LogAttrs(t.Context(), slog.LevelWarn, "Amikai info", slog.Int("age", 18), slog.String("id", "123"), slog.Bool("is married", false))
+	logger.LogAttrs(t.Context(), slog.LevelError, "Amikai info", slog.Int("age", 18), slog.String("id", "123"), slog.Bool("is married", false))
 	want := `{"level":"DEBUG","msg":"Amikai info","age":18,"id":"123","is married":false}
 {"level":"INFO","msg":"Amikai info","age":18,"id":"123","is married":false}
 {"level":"WARN","msg":"Amikai info","age":18,"id":"123","is married":false}
