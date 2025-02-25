@@ -14,7 +14,7 @@ import (
 	"github.com/failsafe-go/failsafe-go/timeout"
 )
 
-func ExampleHTTPClientRoundTripper() {
+func Example_httpClientRoundTripper() {
 	timeout := timeout.With[*http.Response](10 * time.Second)
 	retry := failsafehttp.RetryPolicyBuilder().
 		WithBackoff(time.Second, 30*time.Second).
