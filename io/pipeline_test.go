@@ -12,7 +12,7 @@ func TestPipeline(t *testing.T) {
 
 	concurrency := 10
 	input := []byte{0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15}
-	for i := 0; i < concurrency; i++ {
+	for range concurrency {
 		go func() {
 			_, err := pw.Write(input)
 			assert.NoError(t, err)
@@ -22,7 +22,7 @@ func TestPipeline(t *testing.T) {
 	got := make([]byte, len(input))
 	exp := []byte{0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15}
 
-	for i := 0; i < concurrency; i++ {
+	for range concurrency {
 		_, err := pr.Read(got)
 		assert.NoError(t, err)
 		assert.Equal(t, exp, got)
