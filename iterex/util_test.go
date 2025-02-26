@@ -17,7 +17,6 @@ func Filter[V any](f func(V) bool, seq iter.Seq[V]) iter.Seq[V] {
 				return
 			}
 		}
-		return
 	}
 }
 
@@ -35,7 +34,6 @@ func Map[In, Out any](f func(In) Out, seq iter.Seq[In]) iter.Seq[Out] {
 				return
 			}
 		}
-		return
 	}
 }
 
