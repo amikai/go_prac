@@ -52,3 +52,11 @@ func TestEvenNumsBiggerThan100(t *testing.T) {
 		x = x + 2
 	}
 }
+
+func TestForRangeNilFunc(t *testing.T) {
+	var it iter.Seq[int]
+	assert.Panics(t, func() {
+		for range it {
+		}
+	})
+}
