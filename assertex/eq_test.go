@@ -82,6 +82,17 @@ func TestPointToSameValueEq(t *testing.T) {
 	assert.Equal(t, pa, pb)
 }
 
+func TestSameTypeAlias(t *testing.T) {
+	type (
+		A = int
+		B = int
+	)
+
+	var a A = 1
+	var b B = 1
+	assert.Equal(t, a, b)
+}
+
 func TestSameUnderlyingTypeEqual(t *testing.T) {
 	type (
 		A int
