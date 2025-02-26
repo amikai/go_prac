@@ -33,7 +33,6 @@ func TestFFlag(t *testing.T) {
 }
 
 func TestFFlagWithEnvPrefix(t *testing.T) {
-
 	t.Setenv("MY_PROGRAM_INTFLAG", "12")
 	t.Setenv("MY_PROGRAM_BOOLFLAG", "true")
 	t.Setenv("MY_PROGRAM_STRINGFLAG", "test")
