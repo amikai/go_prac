@@ -3,9 +3,10 @@ module github.com/amikai/go_prac
 go 1.24
 
 require (
+	github.com/Code-Hex/go-generics-cache v1.5.1
 	github.com/alicebob/miniredis/v2 v2.34.0
 	github.com/allegro/bigcache/v3 v3.1.0
-	github.com/danielgtaylor/huma/v2 v2.29.0
+	github.com/danielgtaylor/huma/v2 v2.30.0
 	github.com/deckarep/golang-set/v2 v2.7.0
 	github.com/destel/rill v0.7.0
 	github.com/dgraph-io/ristretto v0.2.0
@@ -40,7 +41,7 @@ require (
 	github.com/alicebob/gopher-json v0.0.0-20230218143504-906a9b012302 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bitfield/gotestdox v0.2.2 // indirect
-	github.com/bits-and-blooms/bitset v1.20.0 // indirect
+	github.com/bits-and-blooms/bitset v1.21.0 // indirect
 	github.com/bsm/ginkgo/v2 v2.12.0 // indirect
 	github.com/bsm/gomega v1.27.10 // indirect
 	github.com/bytedance/sonic v1.12.9 // indirect
