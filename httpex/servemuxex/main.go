@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"errors"
 	"log/slog"
 	"net/http"
 	"os"
@@ -44,7 +43,6 @@ func newRouter() *http.ServeMux {
 func newLogger() *slog.Logger {
 	h := slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelDebug})
 	return slog.New(h)
-
 }
 
 func main() {
@@ -71,9 +69,9 @@ func main() {
 	})
 
 	err := g.Wait()
-	if errors.Is(err, context.Canceled) || err == nil {
-		logger.Info("gracefully quit http server")
-	} else if err != nil {
+	if err != nil {
 		logger.Error(err.Error())
+	} else {
+		logger.Info("gracefully quit gorilla server")
 	}
 }

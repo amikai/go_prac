@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"errors"
 	"log/slog"
 	"net/http"
 	"os"
@@ -67,9 +66,9 @@ func main() {
 	})
 
 	err := g.Wait()
-	if errors.Is(err, context.Canceled) || err == nil {
-		logger.Info("gracefully quit server")
-	} else if err != nil {
+	if err != nil {
 		logger.Error(err.Error())
+	} else {
+		logger.Info("gracefully quit gorilla server")
 	}
 }
