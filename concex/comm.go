@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"math/rand"
+	"math/rand/v2"
 	"time"
 
 	set "github.com/deckarep/golang-set/v2"
@@ -13,7 +13,7 @@ import (
 const fakeResultPrefix = "Fake Result: "
 
 func fakeSearch(url string) (string, error) {
-	n := rand.Intn(100)
+	n := rand.N(100)
 	time.Sleep(time.Duration(n) * time.Millisecond)
 	return fakeResultPrefix + url, nil
 }
@@ -84,9 +84,7 @@ func SearchErr(url string, errs ...error) error {
 }
 
 func RandomFailURLIndex() int {
-	source := rand.NewSource(time.Now().UnixNano())
-	random := rand.New(source)
-	return random.Intn(len(SearchURLs))
+	return rand.N(len(SearchURLs))
 }
 
 var expSearchResult = []string{

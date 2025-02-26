@@ -2,7 +2,7 @@ package concex
 
 import (
 	"context"
-	"math/rand"
+	"math/rand/v2"
 	"runtime"
 	"testing"
 	"time"
@@ -27,8 +27,8 @@ func TestResultPool(t *testing.T) {
 
 func TestResultErrPool(t *testing.T) {
 	var p *pool.ResultErrorPool[string] = pool.NewWithResults[string]().WithMaxGoroutines(runtime.NumCPU()).WithErrors()
-	failedIndex := rand.Intn(len(SearchURLs))
-	failedIndex2 := rand.Intn(len(SearchURLs))
+	failedIndex := rand.N(len(SearchURLs))
+	failedIndex2 := rand.N(len(SearchURLs))
 	for i, url := range SearchURLs {
 		p.Go(func() (string, error) {
 			if i == failedIndex || i == failedIndex2 {
@@ -59,8 +59,8 @@ func TestResultErrPool(t *testing.T) {
 
 func TestResultErrPoolCollected(t *testing.T) {
 	var p *pool.ResultErrorPool[string] = pool.NewWithResults[string]().WithMaxGoroutines(runtime.NumCPU()).WithErrors().WithCollectErrored()
-	failedIndex := rand.Intn(len(SearchURLs))
-	failedIndex2 := rand.Intn(len(SearchURLs))
+	failedIndex := rand.N(len(SearchURLs))
+	failedIndex2 := rand.N(len(SearchURLs))
 	for i, url := range SearchURLs {
 		p.Go(func() (string, error) {
 			if i == failedIndex || i == failedIndex2 {
@@ -91,7 +91,7 @@ func TestResultErrPoolCollected(t *testing.T) {
 
 func TestResultContextPoolCancelOnError(t *testing.T) {
 	var p *pool.ResultContextPool[string] = pool.NewWithResults[string]().WithMaxGoroutines(runtime.NumCPU()).WithContext(t.Context()).WithCancelOnError()
-	failedIndex := rand.Intn(len(SearchURLs))
+	failedIndex := rand.N(len(SearchURLs))
 	for i, url := range SearchURLs {
 		p.Go(func(ctx context.Context) (string, error) {
 			if i == failedIndex {
@@ -111,7 +111,7 @@ func TestResultContextPoolCancelOnError(t *testing.T) {
 func TestResultContextPoolCancelOnErrorTimeout(t *testing.T) {
 	ctx, cancel := context.WithTimeout(t.Context(), 100*time.Millisecond)
 	defer cancel()
-	failedIndex := rand.Intn(len(SearchURLs))
+	failedIndex := rand.N(len(SearchURLs))
 	var p *pool.ResultContextPool[string] = pool.NewWithResults[string]().WithMaxGoroutines(runtime.NumCPU()).WithContext(ctx)
 	for i, url := range SearchURLs {
 		i, url := i, url

@@ -1,28 +1,30 @@
 package goroutineex
 
 import (
-	"math/rand"
+	"math/rand/v2"
 	"sync"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-var MaxSliceLen = 10000
-var MaxChannelNum = 100
+var (
+	MaxSliceLen   = 10000
+	MaxChannelNum = 100
+)
 
 func buildSlice[T any](gen func(int) T) []T {
-	randLen := rand.Intn(MaxSliceLen)
+	randLen := rand.N(MaxSliceLen)
 	ret := make([]T, randLen)
-	for i := 0; i < randLen; i++ {
+	for i := range randLen {
 		ret[i] = gen(i)
 	}
 	return ret
 }
 
 func buildChannels[T any]() []chan T {
-	ret := make([]chan T, rand.Intn(MaxChannelNum))
-	for i := 0; i < len(ret); i++ {
+	ret := make([]chan T, rand.N(MaxChannelNum))
+	for i := range ret {
 		ret[i] = make(chan T)
 	}
 	return ret
@@ -42,7 +44,7 @@ func TestMerge(t *testing.T) {
 
 	wg.Add(len(intSlice))
 	for _, num := range intSlice {
-		whichCh := rand.Intn(len(chs))
+		whichCh := rand.N(len(chs))
 		go send(chs[whichCh], num)
 	}
 
