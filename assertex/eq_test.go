@@ -42,7 +42,6 @@ func TestCompareAnonymousStruct(t *testing.T) {
 
 	// Both structs have the same names, orders and types
 	assert.True(t, p == a)
-
 }
 
 func TestCompareAnonymousStruct2(t *testing.T) {
@@ -81,4 +80,26 @@ func TestPointToSameValueEq(t *testing.T) {
 	pa := &a
 	pb := &b
 	assert.Equal(t, pa, pb)
+}
+
+func TestSameUnderlyingTypeEqual(t *testing.T) {
+	type (
+		A int
+		B int
+	)
+
+	var a A = 1
+	var b B = 1
+	assert.NotEqual(t, a, b)
+}
+
+func TestSameUnderlyingTypeEqualValues(t *testing.T) {
+	type (
+		A int
+		B int
+	)
+
+	var a A = 1
+	var b B = 1
+	assert.EqualValues(t, a, b)
 }
