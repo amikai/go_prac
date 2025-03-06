@@ -35,14 +35,14 @@ func PointerZero(t *testing.T) {
 }
 
 func TestMapZero(t *testing.T) {
-	var m map[string]interface{}
+	var m map[string]any
 	assert.Zero(t, m)
 	// zero value of map is nil
 	assert.Nil(t, m)
 }
 
 func TestSliceZero(t *testing.T) {
-	var sli []interface{}
+	var sli []any
 	assert.Zero(t, sli)
 	// zero value of slice is nil
 	assert.Nil(t, sli)
@@ -53,8 +53,8 @@ func TestZeroStruct(t *testing.T) {
 		i   int
 		f   float64
 		s   string
-		m   map[string]interface{}
-		sli []interface{}
+		m   map[string]any
+		sli []any
 	}
 
 	a := all{}
@@ -66,4 +66,14 @@ func TestZeroStruct(t *testing.T) {
 		m:   nil,
 		sli: nil,
 	}, a)
+}
+
+func TestFuncZero(t *testing.T) {
+	var fn func()
+	assert.Zero(t, fn)
+}
+
+func TestChanZero(t *testing.T) {
+	var ch chan struct{}
+	assert.Zero(t, ch)
 }
