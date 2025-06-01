@@ -11,7 +11,7 @@ import (
 func TestWorkerQueue(t *testing.T) {
 	wq := NewWorkerQueue(16, 0)
 	var total uint64
-	for i := 0; i < 1000000; i++ {
+	for range 1000000 {
 		wq.Submit(func() {
 			atomic.AddUint64(&total, 1)
 		})
@@ -22,12 +22,12 @@ func TestWorkerQueue(t *testing.T) {
 
 func TestWorkerQueueWait(t *testing.T) {
 	wq := NewWorkerQueue(16, 0)
-	for i := 0; i < 100; i++ {
+	for range 100 {
 		wq.Submit(func() {
 			time.Sleep(100 * time.Millisecond)
 		})
 	}
-	for i := 0; i < 100; i++ {
+	for range 100 {
 		go func() {
 			wq.Wait()
 		}()

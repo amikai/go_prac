@@ -11,7 +11,7 @@ import (
 func TestLimiter(t *testing.T) {
 	limiter := NewLimiter(16)
 	var total uint64
-	for i := 0; i < 1000000; i++ {
+	for range 1000000 {
 		limiter.Go(func() {
 			atomic.AddUint64(&total, 1)
 		})
@@ -23,12 +23,12 @@ func TestLimiter(t *testing.T) {
 
 func TestLimiterWait(t *testing.T) {
 	limiter := NewLimiter(16)
-	for i := 0; i < 100; i++ {
+	for range 100 {
 		limiter.Go(func() {
 			time.Sleep(100 * time.Millisecond)
 		})
 	}
-	for i := 0; i < 100; i++ {
+	for range 100 {
 		go func() {
 			limiter.Wait()
 		}()

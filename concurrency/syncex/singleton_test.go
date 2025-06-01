@@ -9,11 +9,11 @@ import (
 
 func TestSingleton(t *testing.T) {
 	var wg sync.WaitGroup
-	for i := 0; i < 1024; i++ {
+	for range 1024 {
 		wg.Add(1)
 		go func() {
 			instance := GetInstance()
-			assert.Equal(t, instance.Count, 1)
+			assert.Equal(t, 1, instance.Count)
 			wg.Done()
 		}()
 	}

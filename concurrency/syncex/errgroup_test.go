@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -38,7 +39,7 @@ func TestErrGroup(t *testing.T) {
 		})
 	}
 	err := g.Wait()
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	exp := []string{
 		fakeResultPrefix + "https://www.google.com",
@@ -55,13 +56,13 @@ func TestErrGroupSetLimit(t *testing.T) {
 
 	var total uint64
 
-	for i := 0; i < 1000000; i++ {
+	for range 1000000 {
 		g.Go(func() error {
 			atomic.AddUint64(&total, 1)
 			return nil
 		})
 	}
 	err := g.Wait()
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, uint64(1000000), total)
 }

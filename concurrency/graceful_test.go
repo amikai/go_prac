@@ -11,12 +11,13 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestGracefulRunReturnEarly(t *testing.T) {
 	time.AfterFunc(100*time.Millisecond, func() {
 		p, err := os.FindProcess(os.Getpid())
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		err = p.Signal(syscall.SIGINT)
 		assert.NoError(t, err)
 	})
@@ -31,7 +32,7 @@ func TestGracefulRunReturnEarly(t *testing.T) {
 func TestGracefulSignal(t *testing.T) {
 	time.AfterFunc(100*time.Millisecond, func() {
 		p, err := os.FindProcess(os.Getpid())
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		err = p.Signal(syscall.SIGINT)
 		assert.NoError(t, err)
 	})
@@ -43,10 +44,10 @@ func TestGracefulSignal(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-func TestGracefullyShudownTimeout(t *testing.T) {
+func TestGracefullyShutdownTimeout(t *testing.T) {
 	time.AfterFunc(100*time.Millisecond, func() {
 		p, err := os.FindProcess(os.Getpid())
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		err = p.Signal(syscall.SIGINT)
 		assert.NoError(t, err)
 	})

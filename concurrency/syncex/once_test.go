@@ -11,7 +11,7 @@ func TestOnce(t *testing.T) {
 	a := 0
 	var once sync.Once
 	wg := sync.WaitGroup{}
-	for i := 0; i < 1024; i++ {
+	for range 1024 {
 		wg.Add(1)
 		go func() {
 			once.Do(func() { a++ })
@@ -29,7 +29,7 @@ func TestOnceFunc(t *testing.T) {
 	})
 
 	wg := sync.WaitGroup{}
-	for i := 0; i < 1024; i++ {
+	for range 1024 {
 		wg.Add(1)
 		go func() {
 			onceF()
@@ -48,7 +48,7 @@ func TestOnceValue(t *testing.T) {
 	})
 
 	wg := sync.WaitGroup{}
-	for i := 0; i < 1024; i++ {
+	for range 1024 {
 		wg.Add(1)
 		go func() {
 			assert.Equal(t, 1, onceF())
