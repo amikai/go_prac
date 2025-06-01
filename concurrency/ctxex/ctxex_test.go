@@ -4,39 +4,52 @@ import (
 	"context"
 	"errors"
 	"testing"
+	"testing/synctest"
 	"time"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestDoWorkSuccess(t *testing.T) {
-	workDuration := 3 * time.Millisecond
-	ctx, cancel := context.WithTimeout(t.Context(), 5*time.Millisecond)
-	defer cancel()
+	synctest.Run(func() {
+		workDuration := 1 * time.Second
 
-	err := DoWork(ctx, workDuration)
-	assert.NoError(t, err)
+		start := time.Now()
+		ctx, cancel := context.WithTimeout(t.Context(), 3*time.Second)
+		defer cancel()
+
+		err := DoWork(ctx, workDuration)
+		assert.NoError(t, err)
+		assert.Equal(t, 1*time.Second, time.Since(start))
+	})
 }
 
 func TestDoWorkDeadline(t *testing.T) {
-	workDuration := 3 * time.Millisecond
-	ctx, cancel := context.WithTimeout(t.Context(), 1*time.Millisecond)
-	defer cancel()
+	synctest.Run(func() {
+		workDuration := 3 * time.Second
 
-	err := DoWork(ctx, workDuration)
-	assert.ErrorIs(t, err, context.DeadlineExceeded)
+		start := time.Now()
+		ctx, cancel := context.WithTimeout(t.Context(), 1*time.Second)
+		defer cancel()
+
+		err := DoWork(ctx, workDuration)
+		assert.Error(t, err, context.DeadlineExceeded)
+		assert.Equal(t, 1*time.Second, time.Since(start))
+	})
 }
 
 func TestDoWorkCancel(t *testing.T) {
-	workDuration := 3 * time.Millisecond
-	ctx, cancel := context.WithCancel(t.Context())
+	synctest.Run(func() {
+		workDuration := 3 * time.Second
 
-	go func() {
-		time.Sleep(1 * time.Millisecond)
-		cancel()
-	}()
-	err := DoWork(ctx, workDuration)
-	assert.ErrorIs(t, err, context.Canceled)
+		start := time.Now()
+		ctx, cancel := context.WithCancel(t.Context())
+		time.AfterFunc(1*time.Second, cancel)
+
+		err := DoWork(ctx, workDuration)
+		assert.Error(t, err, context.Canceled)
+		assert.Equal(t, 1*time.Second, time.Since(start))
+	})
 }
 
 func TestCancelCause(t *testing.T) {
@@ -49,8 +62,9 @@ func TestCancelCause(t *testing.T) {
 }
 
 func TestDeadlineCancelCause(t *testing.T) {
-	t.Run("cancel after timeout", func(t *testing.T) {
-		causeErr := errors.New("cause")
+	t.Run("cancel_after_timeout", func(t *testing.T) {
+		causeErr := errors.New("timeout cause")
+		// set to 0 makes the context timeout immediately
 		ctx, cancel := context.WithTimeoutCause(t.Context(), 0, causeErr)
 		defer cancel()
 
@@ -59,54 +73,60 @@ func TestDeadlineCancelCause(t *testing.T) {
 		assert.NotErrorIs(t, ctx.Err(), context.Canceled)
 	})
 
-	t.Run("cancel before timeout", func(t *testing.T) {
-		causeErr := errors.New("cause")
-		ctx, cancel := context.WithTimeoutCause(t.Context(), 1*time.Second, causeErr)
-		cancel()
+	t.Run("cancel_before_timeout", func(t *testing.T) {
+		synctest.Run(func() {
+			causeErr := errors.New("timeout cause")
+			ctx, cancel := context.WithTimeoutCause(t.Context(), 1*time.Second, causeErr)
+			cancel()
 
-		assert.ErrorIs(t, ctx.Err(), context.Canceled)
-		assert.NotErrorIs(t, ctx.Err(), context.DeadlineExceeded)
-		assert.NotErrorIs(t, context.Cause(ctx), causeErr)
+			assert.ErrorIs(t, ctx.Err(), context.Canceled)
+			assert.NotErrorIs(t, ctx.Err(), context.DeadlineExceeded)
+			assert.NotErrorIs(t, context.Cause(ctx), causeErr)
 
-		time.Sleep(1500 * time.Millisecond)
+			time.Sleep(1500 * time.Millisecond)
 
-		assert.ErrorIs(t, ctx.Err(), context.Canceled)
-		assert.NotErrorIs(t, ctx.Err(), context.DeadlineExceeded)
-		assert.NotErrorIs(t, context.Cause(ctx), causeErr)
+			assert.ErrorIs(t, ctx.Err(), context.Canceled)
+			assert.NotErrorIs(t, ctx.Err(), context.DeadlineExceeded)
+			assert.NotErrorIs(t, context.Cause(ctx), causeErr)
+		})
 	})
 
-	t.Run("verify child or parent context I", func(t *testing.T) {
-		parentCauseErr := errors.New("parent cause")
-		parentCtx, cancel := context.WithTimeoutCause(t.Context(), 1*time.Second, parentCauseErr)
-		defer cancel()
+	t.Run("child_context_timeout_before_parent", func(t *testing.T) {
+		synctest.Run(func() {
+			parentCauseErr := errors.New("parent timeout cause")
+			parentCtx, cancel := context.WithTimeoutCause(t.Context(), 1*time.Second, parentCauseErr)
+			defer cancel()
 
-		childCauseErr := errors.New("child cause")
-		childCtx, cancel := context.WithTimeoutCause(parentCtx, 0, childCauseErr)
-		defer cancel()
+			childCauseErr := errors.New("child timeout cause")
+			childCtx, cancel := context.WithTimeoutCause(parentCtx, 0, childCauseErr)
+			defer cancel()
 
-		assert.NoError(t, parentCtx.Err())
-		assert.NoError(t, context.Cause(parentCtx))
+			assert.NoError(t, parentCtx.Err())
+			assert.NoError(t, context.Cause(parentCtx))
 
-		assert.ErrorIs(t, childCtx.Err(), context.DeadlineExceeded)
-		assert.ErrorIs(t, context.Cause(childCtx), childCauseErr)
+			assert.ErrorIs(t, childCtx.Err(), context.DeadlineExceeded)
+			assert.ErrorIs(t, context.Cause(childCtx), childCauseErr)
+		})
 	})
 
-	t.Run("verify child or parent context II", func(t *testing.T) {
-		parentCauseErr := errors.New("parent cause")
-		parentCtx, cancel := context.WithTimeoutCause(t.Context(), 1*time.Second, parentCauseErr)
-		defer cancel()
+	t.Run("both_parent_and_child_timeout", func(t *testing.T) {
+		synctest.Run(func() {
+			parentCauseErr := errors.New("parent timeout cause")
+			parentCtx, cancel := context.WithTimeoutCause(t.Context(), 1*time.Second, parentCauseErr)
+			defer cancel()
 
-		childCauseErr := errors.New("child cause")
-		childCtx, cancel := context.WithTimeoutCause(parentCtx, 0, childCauseErr)
-		defer cancel()
+			childCauseErr := errors.New("child timeout cause")
+			childCtx, cancel := context.WithTimeoutCause(parentCtx, 0, childCauseErr)
+			defer cancel()
 
-		time.Sleep(1500 * time.Millisecond)
+			time.Sleep(1500 * time.Millisecond)
 
-		assert.ErrorIs(t, parentCtx.Err(), context.DeadlineExceeded)
-		assert.ErrorIs(t, context.Cause(parentCtx), parentCauseErr)
-		assert.NotErrorIs(t, context.Cause(parentCtx), childCauseErr)
+			assert.ErrorIs(t, parentCtx.Err(), context.DeadlineExceeded)
+			assert.ErrorIs(t, context.Cause(parentCtx), parentCauseErr)
+			assert.NotErrorIs(t, context.Cause(parentCtx), childCauseErr)
 
-		assert.ErrorIs(t, childCtx.Err(), context.DeadlineExceeded)
-		assert.ErrorIs(t, context.Cause(childCtx), childCauseErr)
+			assert.ErrorIs(t, childCtx.Err(), context.DeadlineExceeded)
+			assert.ErrorIs(t, context.Cause(childCtx), childCauseErr)
+		})
 	})
 }
