@@ -8,7 +8,7 @@ import (
 	"github.com/destel/rill"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/amikai/go_prac/concex"
+	"github.com/amikai/go_prac/concurrency/concex"
 )
 
 const concLimit = 8
