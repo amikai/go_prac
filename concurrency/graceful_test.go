@@ -62,7 +62,7 @@ func TestGracefullyShutdownTimeout(t *testing.T) {
 func TestGracefullyShutdownToolLong(t *testing.T) {
 	time.AfterFunc(100*time.Millisecond, func() {
 		p, err := os.FindProcess(os.Getpid())
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		err = p.Signal(syscall.SIGINT)
 		assert.NoError(t, err)
 	})
@@ -78,7 +78,7 @@ func TestGracefullyShutdownToolLong(t *testing.T) {
 func TestHttpGracefullyShutdown(t *testing.T) {
 	time.AfterFunc(100*time.Millisecond, func() {
 		p, err := os.FindProcess(os.Getpid())
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		err = p.Signal(syscall.SIGINT)
 		assert.NoError(t, err)
 	})

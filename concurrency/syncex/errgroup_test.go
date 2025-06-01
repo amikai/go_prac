@@ -1,9 +1,10 @@
 package syncex
 
 import (
-	"runtime"
 	"sync/atomic"
 	"testing"
+	"testing/synctest"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -49,20 +50,30 @@ func TestErrGroup(t *testing.T) {
 	assert.Equal(t, exp, results)
 }
 
-func TestErrGroupSetLimit(t *testing.T) {
-	g, _ := errgroup.WithContext(t.Context())
-	g.SetLimit(runtime.NumCPU())
-	t.Logf("errgroup SetLimit(%d)", runtime.NumCPU())
+func TestConcAddOnePerSec(t *testing.T) {
+	synctest.Run(func() {
+		n := 100000
+		concLimit := 8
 
+		start := time.Now()
+		total := ConcAddOnePerSec(n, concLimit)
+
+		assert.Equal(t, n, total)
+		assert.Equal(t, time.Duration(n/concLimit)*time.Second, time.Since(start))
+	})
+}
+
+func ConcAddOnePerSec(num, concLimit int) int {
+	g := &errgroup.Group{}
+	g.SetLimit(concLimit)
 	var total uint64
-
-	for range 1000000 {
+	for range num {
 		g.Go(func() error {
+			time.Sleep(1 * time.Second)
 			atomic.AddUint64(&total, 1)
 			return nil
 		})
 	}
-	err := g.Wait()
-	require.NoError(t, err)
-	assert.Equal(t, uint64(1000000), total)
+	_ = g.Wait()
+	return int(total)
 }
