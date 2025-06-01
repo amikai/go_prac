@@ -9,5 +9,5 @@ import (
 
 func TestTEnv(t *testing.T) {
 	t.Setenv("foo", "bar")
-	assert.Equal(t, os.Getenv("foo"), "bar")
+	assert.Equal(t, "bar", os.Getenv("foo"))
 }
