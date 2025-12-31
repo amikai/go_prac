@@ -15,7 +15,7 @@ func TestDoWorkSuccess(t *testing.T) {
 		workDuration := 1 * time.Second
 
 		start := time.Now()
-		ctx, cancel := context.WithTimeout(t.Context(), 3*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 		defer cancel()
 
 		err := DoWork(ctx, workDuration)
@@ -29,7 +29,7 @@ func TestDoWorkDeadline(t *testing.T) {
 		workDuration := 3 * time.Second
 
 		start := time.Now()
-		ctx, cancel := context.WithTimeout(t.Context(), 1*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 		defer cancel()
 
 		err := DoWork(ctx, workDuration)
@@ -43,7 +43,7 @@ func TestDoWorkCancel(t *testing.T) {
 		workDuration := 3 * time.Second
 
 		start := time.Now()
-		ctx, cancel := context.WithCancel(t.Context())
+		ctx, cancel := context.WithCancel(context.Background())
 		time.AfterFunc(1*time.Second, cancel)
 
 		err := DoWork(ctx, workDuration)
@@ -76,7 +76,7 @@ func TestDeadlineCancelCause(t *testing.T) {
 	t.Run("cancel_before_timeout", func(t *testing.T) {
 		synctest.Run(func() {
 			causeErr := errors.New("timeout cause")
-			ctx, cancel := context.WithTimeoutCause(t.Context(), 1*time.Second, causeErr)
+			ctx, cancel := context.WithTimeoutCause(context.Background(), 1*time.Second, causeErr)
 			cancel()
 
 			assert.ErrorIs(t, ctx.Err(), context.Canceled)
@@ -94,7 +94,7 @@ func TestDeadlineCancelCause(t *testing.T) {
 	t.Run("child_context_timeout_before_parent", func(t *testing.T) {
 		synctest.Run(func() {
 			parentCauseErr := errors.New("parent timeout cause")
-			parentCtx, cancel := context.WithTimeoutCause(t.Context(), 1*time.Second, parentCauseErr)
+			parentCtx, cancel := context.WithTimeoutCause(context.Background(), 1*time.Second, parentCauseErr)
 			defer cancel()
 
 			childCauseErr := errors.New("child timeout cause")
@@ -112,7 +112,7 @@ func TestDeadlineCancelCause(t *testing.T) {
 	t.Run("both_parent_and_child_timeout", func(t *testing.T) {
 		synctest.Run(func() {
 			parentCauseErr := errors.New("parent timeout cause")
-			parentCtx, cancel := context.WithTimeoutCause(t.Context(), 1*time.Second, parentCauseErr)
+			parentCtx, cancel := context.WithTimeoutCause(context.Background(), 1*time.Second, parentCauseErr)
 			defer cancel()
 
 			childCauseErr := errors.New("child timeout cause")

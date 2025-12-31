@@ -70,7 +70,7 @@ func TestSliceMin(t *testing.T) {
 
 func TestSliceMinEmpty(t *testing.T) {
 	var input []int
-	assert.Panics(t, func() { slices.Min(input) })
+	assert.Panics(t, func() { _ = slices.Min(input) })
 }
 
 func TestSliceMax(t *testing.T) {
@@ -83,7 +83,7 @@ func TestSliceMax(t *testing.T) {
 
 func TestSliceMaxEmpty(t *testing.T) {
 	var input []int
-	assert.Panics(t, func() { slices.Max(input) })
+	assert.Panics(t, func() { _ = slices.Max(input) })
 }
 
 func TestSliceClone(t *testing.T) {

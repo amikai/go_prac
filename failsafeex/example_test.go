@@ -15,13 +15,13 @@ import (
 )
 
 func Example_httpClientRoundTripper() {
-	timeout := timeout.With[*http.Response](10 * time.Second)
-	retry := failsafehttp.RetryPolicyBuilder().
+	timeout := timeout.New[*http.Response](10 * time.Second)
+	retry := failsafehttp.NewRetryPolicyBuilder().
 		WithBackoff(time.Second, 30*time.Second).
 		WithMaxRetries(3).
 		Build()
 
-	circuitBreaker := circuitbreaker.Builder[*http.Response]().
+	circuitBreaker := circuitbreaker.NewBuilder[*http.Response]().
 		HandleIf(func(response *http.Response, err error) bool {
 			return response != nil && response.StatusCode == 429
 		}).
